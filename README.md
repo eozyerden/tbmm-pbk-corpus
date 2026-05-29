@@ -15,7 +15,7 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 ## What's in this corpus
 
 - **223,408 speaker turns** across 294 committee sessions
-- **17 budget years** (2009-2025; 2015 absent due to early elections)
+- **17 budget years** (2009-2025). Note: budget deliberations did not take place in calendar year 2015 due to early elections; however, the 2015 budget year is included in the corpus (deliberated in late 2014).
 - **1,184 unique members of parliament** with linked party, province, and term metadata
 - **~100 ministers** (both MP-ministers and appointed technocrats)
 - **97.5% metadata linkage rate**

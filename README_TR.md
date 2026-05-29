@@ -13,7 +13,7 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 ## Kapsam
 
 - 294 PDF oturum tutanağı (196 SBB + 98 TBMM eski sistem)
-- 17 bütçe yılı (2009-2025; 2015 takvim yılında görüşme yapılmadı)
+- 17 bütçe yılı (2009-2025). Not: Erken seçim takvimi nedeniyle 2015 takvim yılında PBK görüşmesi yapılmamıştır; ancak 2015 bütçe yılı korpusta yer alır (Kasım 2014'te görüşüldü).
 - 1.184 benzersiz milletvekili — parti, il, dönem metadata'lı
 - ~100 bakan (mv-bakan + atanmış teknokrat)
 - %97.5 metadata eşleşme oranı

@@ -5,8 +5,8 @@
 ### 1.1 Pre-2009 proceedings not available
 Budget hearings before the 2009 budget year (i.e., sessions held in late 2007 and late 2008) are not included. TBMM's legacy document system (OWA) does not have records for legislative year 1 and year 2 of the 23rd term. Coverage begins with the 2009 budget (sessions held November 2008 onward).
 
-### 1.2 No 2015 budget hearings
-No PBK budget hearings took place in calendar year 2015. The June 2015 elections produced a hung parliament; snap elections were called for November 2015. The new government was formed on 24 November 2015, after the normal October-November budget window had passed. The 2016 budget was consequently deliberated in January-February 2016. `butce_yili = 2016` is correctly assigned to those sessions; there is no data gap — no hearings were held.
+### 1.2 No budget deliberations in calendar year 2015
+No PBK budget hearings took place in calendar year 2015. The 2015 budget year itself **is** included in the corpus (the 2015 budget was deliberated in late 2014). The June 2015 elections produced a hung parliament; snap elections were called for November 2015. The new government was formed on 24 November 2015, after the normal October-November budget window had passed. The 2016 budget was consequently deliberated in January-February 2016. `butce_yili = 2016` is correctly assigned to those sessions; there is no data gap — no hearings were held.
 
 ### 1.3 Incomplete 2009 budget data (4 sessions)
 The 2009 budget year (sessions from late 2008) has only 4 transcripts in the TBMM OWA system, while all other years have 10-23. The reason is unknown (indexing issue or actual missing sessions). Treat 2009 with caution in count-based analyses.

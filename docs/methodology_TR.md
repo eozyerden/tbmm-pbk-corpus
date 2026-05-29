@@ -58,7 +58,7 @@ Ham PDF ve parquet dosyaları bu repoda **yer almaz**; Zenodo arşivinden indiri
 |---|---|
 | Toplam konuşma | 223.408 |
 | Toplam PDF (oturum tutanağı) | 294 |
-| Kapsanan bütçe yılları | 2009-2025 (2015 hariç, o yıl görüşme yapılmadı) |
+| Kapsanan bütçe yılları | 2009-2025 (2015 takvim yılında görüşme yapılmadı; 2015 bütçe yılı kapsama dahildir) |
 | Tarih aralığı | 17 Kasım 2008 – 29 Kasım 2024 |
 | Tek başına milletvekili sayısı | 1.184 |
 | Bakan sayısı | ~100 (mv-bakan + atanmış teknokrat) |
