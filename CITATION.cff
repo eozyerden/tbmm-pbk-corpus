@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+title: "TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)"
+abstract: "A structured corpus of Turkish parliamentary budget committee proceedings spanning 17 budget years (2009-2025), containing 223,408 speaker turns with linked MP-party-province metadata."
+authors:
+  - family-names: Özyerden
+    given-names: Emre
+    email: eozyerden@gmail.com
+type: dataset
+version: 1.0.0
+date-released: 2026-XX-XX
+url: "https://github.com/eozyerden/tbmm-pbk-corpus"
+license: CC-BY-4.0
+keywords:
+  - parliamentary corpus
+  - Turkey
+  - TBMM
+  - fiscal discourse
+  - budget committee
+  - text as data
+  - Turkish NLP

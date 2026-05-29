@@ -1,0 +1,31 @@
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+renv/library/
+renv/staging/
+
+# Logs and temp
+*.log
+logs/
+*.tmp
+
+# Generated data (download from Zenodo)
+data/raw/
+data/processed/
+!data/manuel/
+!data/metadata/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Personal/working files
+komut.md
+*.private.md
