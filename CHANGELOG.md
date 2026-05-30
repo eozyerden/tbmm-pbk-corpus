@@ -6,10 +6,14 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [1.0.1] - 2026-05-28
+## [1.0.1] - 2026-05-30
 
 ### Added
 - Author ORCID identifier (0000-0003-3577-4236) in CITATION.cff, README files
+- Initial publication on Zenodo (2026-05-30)
+- DOI (concept): 10.5281/zenodo.20457565
+- DOI (this version): 10.5281/zenodo.20457566
+- Data files uploaded to Zenodo (processed parquet + raw PDFs, 394 MB)
 
 ## [1.0.0] - 2026-XX-XX
 
