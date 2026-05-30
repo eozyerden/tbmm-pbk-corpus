@@ -3,6 +3,7 @@
 [![DOI](https://zenodo.org/badge/DOI/PENDING.svg)](https://doi.org/PENDING)
 [![License: MIT](https://img.shields.io/badge/License%20(Code)-MIT-yellow.svg)](LICENSE)
 [![License: CC BY 4.0](https://img.shields.io/badge/License%20(Data)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
 
 A structured, machine-readable corpus of the **Turkish Grand National Assembly (TBMM) Plan and Budget Committee (Plan ve Bütçe Komisyonu, PBK)** budget proceedings, covering **17 budget years (2009-2025)** and containing **223,408 speaker turns**.
 
@@ -103,8 +104,7 @@ See [LICENSE](LICENSE) for full terms.
 - **Data and documentation** (`data/`, `docs/`, README files, published corpus): CC BY 4.0
 
 ## Contact
-
-Emre Özyerden — eozyerden@gmail.com
+Emre Özyerden ([ORCID: 0000-0003-3577-4236](https://orcid.org/0000-0003-3577-4236)) — eozyerden@gmail.com
 
 ## Related work
 
