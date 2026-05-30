@@ -6,6 +6,11 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-05-28
+
+### Added
+- Author ORCID identifier (0000-0003-3577-4236) in CITATION.cff, README files
+
 ## [1.0.0] - 2026-XX-XX
 
 ### Added
