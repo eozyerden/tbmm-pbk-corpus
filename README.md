@@ -92,7 +92,7 @@ If you use this corpus in your research, please cite:
 
 ```
 Özyerden, E. (2026). TBMM Budget Committee Discourse Corpus (2009-2025) [Dataset].
-Zenodo. https://doi.org/[PENDING]
+Zenodo. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 ```
 
 A machine-readable citation is available in [`CITATION.cff`](CITATION.cff).
