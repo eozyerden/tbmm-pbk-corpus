@@ -59,7 +59,7 @@ Bu GitHub reposu şunları içerir:
 
 ```
 Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
-Söylem Korpusu (2009-2025) [Veri seti]. DOI: [beklemede]
+Söylem Korpusu (2009-2025) [Veri seti]. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 ```
 
 ## Lisans
