@@ -6,11 +6,20 @@ authors:
   - family-names: Özyerden
     given-names: Emre
     email: eozyerden@gmail.com
+    orcid: "https://orcid.org/0000-0003-3577-4236"
 type: dataset
-version: 1.0.0
-date-released: 2026-XX-XX
+version: 1.0.1
+date-released: 2026-05-30
 url: "https://github.com/eozyerden/tbmm-pbk-corpus"
 license: CC-BY-4.0
+doi: 10.5281/zenodo.20457565
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20457565
+    description: Concept DOI (always points to latest version)
+  - type: doi
+    value: 10.5281/zenodo.20457566
+    description: Version v1.0.1 DOI
 keywords:
   - parliamentary corpus
   - Turkey

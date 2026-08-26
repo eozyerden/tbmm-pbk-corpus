@@ -3,6 +3,7 @@
 [![DOI](https://zenodo.org/badge/DOI/PENDING.svg)](https://doi.org/PENDING)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans%20(Kod)-MIT-yellow.svg)](LICENSE)
 [![Lisans: CC BY 4.0](https://img.shields.io/badge/Lisans%20(Veri)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
 
 TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, makineyle okunabilir korpusu. **17 yıl (2009-2025)**, **223.408 konuşma satırı**, milletvekili-parti-il metadata'sı bağlantılı.
 
@@ -58,7 +59,7 @@ Bu GitHub reposu şunları içerir:
 
 ```
 Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
-Söylem Korpusu (2009-2025) [Veri seti]. DOI: [beklemede]
+Söylem Korpusu (2009-2025) [Veri seti]. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 ```
 
 ## Lisans
@@ -69,4 +70,4 @@ Bkz. [LICENSE](LICENSE)
 
 ## İletişim
 
-Emre Özyerden — eozyerden@gmail.com
+Emre Özyerden ([ORCID: 0000-0003-3577-4236](https://orcid.org/0000-0003-3577-4236)) — eozyerden@gmail.com
