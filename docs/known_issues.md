@@ -44,6 +44,13 @@ The `bakanlık` (ministry) field, where present, is derived from detecting minis
 ### 3.3 Speaker continuity not tracked
 When the same speaker makes multiple interventions in a session, each is recorded as a separate row. The corpus does not link these into a single "floor time" unit, nor does it record the interlocutor. Cross-turn context must be reconstructed by the analyst using `tarih` + `oturum_sira`.
 
+A related low-level case: where a speaker header is followed by a dash
+with no intervening space (`ADI SOYADI (İl) -Metin`), the regex does not
+match and the transition is missed. This occurs at background levels
+throughout the corpus, most visibly in budget year 2025 (approximately
+36 turns). Unlike the 2016 failure, it does not distort role
+distribution or turn length at the population level.
+
 ---
 
 ## 4. Encoding Issues (Historical — 2016 PDFs)
@@ -57,36 +64,57 @@ These have been corrected in the published corpus (total: 118,596 characters). T
 
 ### 4.1 Speaker segmentation failure in 2016 SBB transcripts
 
-**Severity: affects speaker attribution for budget year 2016.**
+**Severity: high. Speaker-level data for budget year 2016 should not be
+used.**
 
-The character corruption documented above (İ→Ġ, Ş→Ģ/ġ) was repaired at
+The character corruption documented in §4 (İ→Ġ, Ş→Ģ/ġ) was repaired at
 the text level, but the repair was applied *after* speaker segmentation.
 The speaker-line regex in `R/parse_helpers.R` matches only standard
 Turkish uppercase characters; the corrupted glyphs Ġ, Ģ and ġ fall
 outside that class. Speaker headers such as `BAĠKAN –` and
 `MALĠYE BAKANI ... –` were therefore not recognised as speaker
-transitions, and those lines were appended to the preceding speaker's
+transitions, and those lines were absorbed into the preceding speaker's
 turn.
 
-Consequences for budget year 2016:
+**Scale of the problem:**
 
-- Turns are merged across speakers. One record attributed to a single
-  MP was found to contain the chair's intervention and a minister's
-  full presentation.
-- Role distribution is distorted: MPs account for 86.2% of turns in
-  2016 against roughly 50-58% in adjacent years; the chair accounts
-  for 8.6% against roughly 30-33%.
-- Mean turn length is inflated (173 words, the highest in the corpus).
-- Diagnostic: the pattern of an embedded speaker header appears in
-  1.32% of 2016 turns, against 0.10% in 2015 and 0.06% in 2017.
+| Measure | Value |
+|---|---|
+| Recorded turns for budget year 2016 | 6,745 |
+| Turns containing an unrecognised speaker header | 2,691 (39.9%) |
+| Total unrecognised speaker transitions | 4,529 |
+| Estimated true turn count | ~11,274 |
+| Share of 2016 word volume in affected turns | 71.7% |
+| Affected source PDFs | 13 of 13 |
 
-**Users analysing speaker-level attributes — role, party, turn length,
-who-said-what — should exclude budget year 2016 or treat it with
-caution.** Aggregate text content for 2016 is intact; only the
-boundaries between turns are unreliable.
+All thirteen affected PDFs are compromised throughout, not in isolated
+passages. The recorded turn count for 2016 is roughly one third short of
+what it should be, and the majority of the year's text sits inside
+merged turns.
 
-This affects 13 SBB PDFs. A corrected re-parse, applying the encoding
-repair before segmentation, is planned for a future version.
+**Observable consequences:**
+
+- Role distribution is severely distorted. MPs account for 86.2% of 2016
+  turns against a corpus range of roughly 50-58%; the chair accounts for
+  8.6% against a corpus range of 25-48%.
+- Mean turn length is 173 words, the highest of any year; the corpus
+  median is 8-9 words.
+- Individual records conflate multiple speakers. One record attributed
+  to a single MP was found to contain the chair's intervention and a
+  minister's full budget presentation.
+
+**Guidance for users:**
+
+Budget year 2016 should be excluded from any analysis of speaker
+attributes — role, party, turn length, speaker identity, turn counts,
+or who-said-what. The text itself is present and the encoding is
+correct; what is unreliable is the assignment of text to speakers and
+the boundaries between turns. Analyses operating on the year's aggregate
+text without reference to speakers are unaffected.
+
+A corrected re-parse, applying the encoding repair before segmentation,
+is planned. The corruption is confined to 2016: the glyphs Ġ, Ģ and ġ
+appear in no other budget year.
 
 ---
 

@@ -19,6 +19,13 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 - ~100 bakan (mv-bakan + atanmış teknokrat)
 - %97.5 metadata eşleşme oranı
 
+> **Veri kalitesi uyarısı — 2016 bütçe yılı.** 2016 bütçe yılında
+> konuşmacı atfı güvenilir değildir: bir segmentasyon hatası nedeniyle
+> konuşmalar birbirine karışmış, o yılın kelime hacminin %71,7'si
+> etkilenmiştir. Konuşmacı düzeyindeki analizlerde 2016 hariç
+> tutulmalıdır. Metin içeriği sağlamdır. Ayrıntı için
+> [docs/known_issues.md](docs/known_issues.md) §4.1.
+
 ## Hızlı Başlangıç
 
 ```r

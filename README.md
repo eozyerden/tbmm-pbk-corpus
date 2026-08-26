@@ -21,6 +21,12 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 - **~100 ministers** (both MP-ministers and appointed technocrats)
 - **97.5% metadata linkage rate**
 
+> **Data quality notice — budget year 2016.** Speaker attribution for
+> budget year 2016 is unreliable: a segmentation failure merged turns
+> across speakers, affecting 71.7% of that year's word volume. Exclude
+> 2016 from speaker-level analysis. Text content is intact. See
+> [docs/known_issues.md](docs/known_issues.md) §4.1.
+
 ## Quick start
 
 ```r
