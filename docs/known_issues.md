@@ -72,3 +72,28 @@ Sixteen SBB PDFs from the 2018 budget season (October-November 2018) are in PDF 
 ## 7. Replication Dependency: Poppler
 
 Reproducing the 2018 extraction step requires Poppler's `pdftotext` binary. On Windows, this is available via MiKTeX (`pdftotext.exe`). The path must be set in `05_extract_text_2018_poppler.R`. See `docs/replication_guide.md` for instructions.
+
+---
+
+## 8. Legacy TBMM Transcript Endpoint Behaviour
+
+### 8.1 Legacy TBMM transcript endpoint behaviour
+
+The 2009-2015 portion of the corpus was retrieved from the legacy TBMM
+transcript endpoint (`TutanakGoster/{ID}`). Three properties of this endpoint
+are undocumented and cost time to rediscover:
+
+1. **Identifiers are not monotonic with date.** Within TBMM term 24, one
+   legislative year occupies IDs 1062-1080 while another spans 20-1038.
+   Sequential ID scanning is therefore not a valid strategy for discovering
+   earlier sessions.
+2. **HEAD requests return `text/html` regardless of actual content.** The
+   real content type is only visible via GET. Any availability check built on
+   HEAD responses will be unreliable.
+3. **Unavailable IDs return a fixed-size PNG placeholder, not HTTP 404.**
+   The response code is 200. Availability must be determined from response
+   size and content type, not status code.
+
+These were established by testing five IDs in June 2026. Whether the endpoint
+serves pre-2009 committee transcripts remains undetermined: a low test ID
+returned a genuine PDF, but its date was not verified.
