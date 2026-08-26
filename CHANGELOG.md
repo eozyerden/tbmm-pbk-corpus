@@ -6,6 +6,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Documented
+- Speaker segmentation failure in 2016 SBB transcripts (known_issues.md)
+- Legacy TBMM transcript endpoint behaviour (known_issues.md)
+
+### Planned
+- Re-parse of 13 affected 2016 SBB PDFs with corrected processing order
+
 ## [1.0.0] - 2026-XX-XX
 
 ### Added

@@ -55,6 +55,39 @@ Thirteen SBB PDFs from 2016 were generated with a defective encoding that corrup
 
 These have been corrected in the published corpus (total: 118,596 characters). The pre-correction version is preserved as `konusmalar_metadata_v1_pre_encoding.parquet` in the Zenodo archive for reproducibility.
 
+### 4.1 Speaker segmentation failure in 2016 SBB transcripts
+
+**Severity: affects speaker attribution for budget year 2016.**
+
+The character corruption documented above (İ→Ġ, Ş→Ģ/ġ) was repaired at
+the text level, but the repair was applied *after* speaker segmentation.
+The speaker-line regex in `R/parse_helpers.R` matches only standard
+Turkish uppercase characters; the corrupted glyphs Ġ, Ģ and ġ fall
+outside that class. Speaker headers such as `BAĠKAN –` and
+`MALĠYE BAKANI ... –` were therefore not recognised as speaker
+transitions, and those lines were appended to the preceding speaker's
+turn.
+
+Consequences for budget year 2016:
+
+- Turns are merged across speakers. One record attributed to a single
+  MP was found to contain the chair's intervention and a minister's
+  full presentation.
+- Role distribution is distorted: MPs account for 86.2% of turns in
+  2016 against roughly 50-58% in adjacent years; the chair accounts
+  for 8.6% against roughly 30-33%.
+- Mean turn length is inflated (173 words, the highest in the corpus).
+- Diagnostic: the pattern of an embedded speaker header appears in
+  1.32% of 2016 turns, against 0.10% in 2015 and 0.06% in 2017.
+
+**Users analysing speaker-level attributes — role, party, turn length,
+who-said-what — should exclude budget year 2016 or treat it with
+caution.** Aggregate text content for 2016 is intact; only the
+boundaries between turns are unreliable.
+
+This affects 13 SBB PDFs. A corrected re-parse, applying the encoding
+repair before segmentation, is planned for a future version.
+
 ---
 
 ## 5. Single Date Discrepancy
