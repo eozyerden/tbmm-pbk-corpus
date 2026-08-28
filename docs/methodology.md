@@ -159,7 +159,7 @@ Matching is performed on normalized names (`konusmaci_sade` after Turkish upperc
 **Alias resolution:**
 - **Adil Kurt = Adil Zozani** — the MP legally changed his surname by court order. Old transcripts use the former name; the TBMM roster uses the new name. An alias table maps the old name to the correct `sicil`.
 
-Final match rate: **97.5%** overall (per-year range: 92-99%).
+Final match rate: **98.0%** (MP role; chair 100%, minister 99.3%).
 
 ### 6.2 Committee chair matching (Tier 2)
 

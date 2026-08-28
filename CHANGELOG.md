@@ -4,17 +4,42 @@ All notable changes to this dataset will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-XX-XX
+
+### Fixed
+- Speaker segmentation failure in budget year 2016. The encoding
+  repair now runs before segmentation. Turn count for that year rose
+  from 6,745 to 15,260; chair share from 8.6% to 31.2%.
+- Footer text leaking into speech records in budget years 2013-2016.
+  Two footer templates were not matched by the cleaning rules.
+  5,268 turns affected.
+- Role classification for institutional representatives. Word-boundary
+  assertions failed against Turkish suffixes, and fourteen institutions
+  were missing from the pattern list. 806 turns reclassified from
+  `milletvekili` to `burokrat`.
+- Committee chair for budget year 2015 was unidentified; the lookup
+  table gap is now filled. Chair linkage for that year rose from 0.5%
+  to 100%.
+- Unique MP count was reported as 1,184 in documentation up to
+  v1.0.1. That was a count of raw speaker strings, not people; the
+  correct figure is 858. See known_issues.md.
+
+### Added
+- Chair and minister identity matching, which had not been run against
+  the published dataset. Seven columns: `bakan_id`, `bakanlik_adi`,
+  `bakanlik_baslangic`, `bakanlik_bitis`, `mv_sicil_bakan`,
+  `mv_parti_bakan`, `bakan_eslesme_tier`.
+- `scripts/99_validate.R`, a standing validation suite.
+- `data/processed/baseline_v1.1.0.csv`, reference metrics.
+
+### Changed
+- Corpus total: 223,408 turns to 231,923.
+- Linkage is now reported by role: MP 98.0%, chair 100%, minister
+  99.3%. The previously headlined 97.5% applied to the MP role only.
 
 ### Documented
-- Speaker segmentation failure in 2016 SBB transcripts, with measured
-  scale (known_issues.md §4.1)
 - Legacy TBMM transcript endpoint behaviour (known_issues.md)
 - Unspaced speaker-dash transitions as a background parser limitation
-  (known_issues.md §3.3)
-
-### Planned
-- Re-parse of 13 affected 2016 SBB PDFs with corrected processing order
 
 ## [1.0.1] - 2026-05-30
 

@@ -5,7 +5,7 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/License%20(Data)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
 
-A structured, machine-readable corpus of the **Turkish Grand National Assembly (TBMM) Plan and Budget Committee (Plan ve Bütçe Komisyonu, PBK)** budget proceedings, covering **17 budget years (2009-2025)** and containing **223,408 speaker turns**.
+A structured, machine-readable corpus of the **Turkish Grand National Assembly (TBMM) Plan and Budget Committee (Plan ve Bütçe Komisyonu, PBK)** budget proceedings, covering **17 budget years (2009-2025)** and containing **231,923 speaker turns**.
 
 In Türkiye, the Plan and Budget Committee is the first and most detailed parliamentary stage where the central government budget is deliberated. Each ministry's budget is discussed in depth; ministers, bureaucrats, and members of parliament engage in extensive technical debate. Plenary debate follows in December.
 
@@ -15,17 +15,19 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 
 ## What's in this corpus
 
-- **223,408 speaker turns** across 294 committee sessions
+- **231,923 speaker turns** across 294 committee sessions
 - **17 budget years** (2009-2025). Note: budget deliberations did not take place in calendar year 2015 due to early elections; however, the 2015 budget year is included in the corpus (deliberated in late 2014).
-- **1,184 unique members of parliament** with linked party, province, and term metadata
+- **858 unique MPs** (identified by TBMM permanent identifier) with linked party, province, and term metadata
 - **~100 ministers** (both MP-ministers and appointed technocrats)
-- **97.5% metadata linkage rate**
+- **Identity linkage by role: MP 98.0%, chair 100%, minister 99.3%** (see [docs/data_dictionary.md](docs/data_dictionary.md))
 
-> **Data quality notice — budget year 2016.** Speaker attribution for
-> budget year 2016 is unreliable: a segmentation failure merged turns
-> across speakers, affecting 71.7% of that year's word volume. Exclude
-> 2016 from speaker-level analysis. Text content is intact. See
-> [docs/known_issues.md](docs/known_issues.md) §4.1.
+> **Data quality.** Version 1.1.0 corrects four defects present in
+> v1.0.1, affecting speaker segmentation in budget year 2016, footer
+> text in 2013-2016, role classification of institutional
+> representatives, and chair identification for 2015. See
+> [CHANGELOG.md](CHANGELOG.md) and
+> [docs/known_issues.md](docs/known_issues.md). Users of v1.0.1
+> should migrate.
 
 ## Quick start
 

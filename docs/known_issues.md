@@ -19,6 +19,10 @@ This corpus covers only the **committee stage** (Plan ve Bütçe Komisyonu). Ple
 ## 2. Metadata Limitations
 
 ### 2.1 ~2.5% of MP speeches unmatched (3,271 rows)
+
+**Note:** The figure below is from v1.0.1. Current linkage rates are
+reported by role in the data dictionary; see also §3.1.
+
 After manual corrections, 97.5% of MP-role rows have a matched TBMM registration number (`sicil`). The remaining ~2.5% are primarily:
 - **Institutional representatives** (Sayıştay, RTÜK, Rekabet Kurumu, etc.) that the parser incorrectly classified as MPs. These appear with `rol = "milletvekili"` but are not elected members.
 - A small number of genuine MPs whose names could not be normalized to match the TBMM roster.
@@ -31,12 +35,66 @@ Aslanoğlu served as an MP in the 23rd term (CHP, Malatya) and the 24th term (CH
 ### 2.3 2012-2014 previously lower match rates
 Before the manual corrections described above, match rates for budget years 2012 (70%), 2013 (73%), and 2014 (77%) were significantly below the corpus average. These are now resolved (96-99% range) through manual MP additions and the Adil Kurt → Adil Zozani alias.
 
+### 2.4 Speaker count misreported in v1.0.1
+
+**Status: corrected in v1.1.0.**
+
+Versions up to v1.0.1 reported 1,184 unique MPs. That figure was a
+count of distinct raw speaker strings taken from an early exploratory
+report, before name normalisation and identifier matching. It was
+carried into the README and methodology documents as if it were a
+count of people.
+
+The correct figure, counting distinct TBMM permanent identifiers among
+turns classified as MP speech, is 858.
+
+The inflation had two sources. Sixty-two individuals appear under more
+than one spelling of their name; in the most extreme case a single MP
+appears under eleven variants, adding ten spurious entries by himself.
+A further 204 distinct speaker strings could not be matched to the MP
+roster at all and were counted as separate people.
+
+The corrected figure is internally consistent: it yields 1,119
+term-person pairs across the five TBMM terms in the corpus, implying
+that roughly 260 individuals spoke as MPs in more than one term, which
+matches expected re-election patterns. Per-term counts range from 93
+to 339.
+
 ---
 
 ## 3. Parser Limitations
 
 ### 3.1 Institutional representatives misclassified as MPs
+
+**Status: largely fixed in v1.1.0.**
+
 The parser assigns `rol = "milletvekili"` to any speaker with a province tag in parentheses. Institutional representatives occasionally appear with province-like tags and are thus misclassified. The most prominent case is Erol Akbulut (Deputy Chair, Sayıştay), responsible for 82 rows. This is a known parser limitation; correcting it requires a separate NER/lookup sprint.
+
+**Resolution (v1.1.0).** Two causes were identified. First, the
+patterns `MÜSTEŞAR\b` and `GENEL MÜDÜR\b` failed against the Turkish
+possessive suffix: in `MÜSTEŞARI` the suffix begins with ASCII `I`,
+which the word-boundary assertion treats as a word character, so no
+boundary is found. `GENEL MÜDÜRÜ` matched only because its suffix
+begins with `Ü`, which is not an ASCII word character — the two
+patterns behaved differently by accident. Second, several institutions
+were absent from the pattern list entirely: RTÜK, BDDK, SPK, the
+Competition Authority, the Public Procurement Authority, the
+Ombudsman, TMSF, TÜİK and TÜBİTAK, along with the titles
+*Başkan Yardımcısı*, *Daire Başkanı*, *Denetçi*, *Strateji Geliştirme*
+and *Teftiş Kurulu*.
+
+The boundary assertions were removed and the institution list extended
+to 23 terms. 806 turns moved from `milletvekili` to `burokrat`. The
+bureaucrat count rose from 521 to 1,327, or from 1.77 to 4.51 turns
+per session day. MP linkage rose from 97.4% to 98.0%, since the
+reclassified turns were never matchable against the MP roster.
+
+**Remaining.** Eleven turns by the committee's own deputy chairs
+(recorded as `PLAN VE BÜTÇE KOMİSYONU BAŞKAN VEKİLİ ...`) are still
+labelled `milletvekili`. The chair patterns are anchored to the start
+of the speaker string and do not match. Removing the anchor was tested
+and rejected: it would capture the deputy chairs of nine other
+institutions.
 
 ### 3.2 Ministry-speech mapping is approximate
 The `bakanlık` (ministry) field, where present, is derived from detecting ministry names in the full PDF text, not from structured agenda items. A ministry name appearing in a PDF does not guarantee that the day's session was devoted to that ministry's budget. More precise mapping (via agenda headings + minister opening statement) is left for future work.
@@ -63,6 +121,9 @@ Thirteen SBB PDFs from 2016 were generated with a defective encoding that corrup
 These have been corrected in the published corpus (total: 118,596 characters). The pre-correction version is preserved as `konusmalar_metadata_v1_pre_encoding.parquet` in the Zenodo archive for reproducibility.
 
 ### 4.1 Speaker segmentation failure in 2016 SBB transcripts
+
+**Status: fixed in v1.1.0.** The description below documents the
+defect as it existed in v1.0.1.
 
 **Severity: high. Speaker-level data for budget year 2016 should not be
 used.**
@@ -116,6 +177,43 @@ A corrected re-parse, applying the encoding repair before segmentation,
 is planned. The corruption is confined to 2016: the glyphs Ġ, Ģ and ġ
 appear in no other budget year.
 
+**Resolution (v1.1.0).** The encoding repair was moved into the parse
+pipeline, ahead of segmentation. All 34 source files with 2016 in
+their name were re-parsed. Budget year 2016 now contains 15,260 turns
+against 6,745 previously; the chair share is 31.2% against 8.6%; mean
+turn length is 74.0 words against 172.9. Users of v1.0.1 should
+migrate to v1.1.0 for any speaker-level analysis of that year.
+
+### 4.2 Footer text in speech records, budget years 2013-2016
+
+**Status: fixed in v1.1.0.**
+
+Two page-footer templates escaped the text-cleaning rules and their
+content entered the speech records.
+
+The first is an OWA-era template. TBMM's transcription unit was
+renamed from *Tutanak Müdürlüğü* to *Tutanak Hizmetleri Başkanlığı*
+around calendar year 2012. The cleaning rule matched only the older
+name, so from that point the three-line footer block was no longer
+recognised.
+
+The second appears only in the 2016 SBB files: a four-line block
+beginning with `T BM M`, the acronym broken by spurious inter-letter
+spacing from PDF extraction, followed by the unit name, the committee
+name, and a date/page line. One file carries a five-line variant with
+an added *İncelenmemiş Tutanaktır* stamp.
+
+Scope: 5,268 turns across budget years 2013, 2014, 2015 and 2016.
+Speaker attribution was not affected — only the text of those turns
+carried extra content, and word counts were correspondingly inflated.
+
+**Resolution (v1.1.0).** The OWA rule now accepts both names of the
+transcription unit; a new rule handles both variants of the SBB
+template. Word counts fell by 1.77-1.83% in budget years 2013-2015
+and by 3.11% in 2016. Three instances of the phrase remain in the
+corpus, all verified as legitimate speech about the transcription
+service.
+
 ---
 
 ## 5. Single Date Discrepancy
@@ -158,3 +256,25 @@ are undocumented and cost time to rediscover:
 These were established by testing five IDs in June 2026. Whether the endpoint
 serves pre-2009 committee transcripts remains undetermined: a low test ID
 returned a genuine PDF, but its date was not verified.
+
+---
+
+## Quality assurance
+
+From v1.1.0 the repository includes `scripts/99_validate.R`, a
+validation suite run after any pipeline change. It reports per-year
+structural metrics — turn counts, turns per source PDF, length
+distribution including the upper tail, role shares, linkage rates —
+and flags years falling outside expected bands. It also runs residue
+checks for corrupted characters, footer text, embedded speaker headers
+and misclassified institutional representatives, and compares against
+a stored baseline.
+
+The suite was validated against the pre-correction data: it raises two
+band flags and three residue alerts for budget year 2016, and lists
+seven of the affected source files as outliers.
+
+The defects corrected in v1.1.0 were not found by systematic quality
+control. They surfaced while investigating an unrelated measurement
+question. This suite exists so that the same class of defect is caught
+by design rather than by chance.

@@ -73,6 +73,11 @@ parse_one_file <- function(yerel_txt_yol, kaynak, tarih, butce_yili, dosya_kayna
   )
   if (length(lines) == 0L) return(NULL)
 
+  # [2026-06 EKLENDI] Encoding duzeltmesi segmentasyondan ONCE uygulanmali,
+  # aksi halde bozuk konusmaci basliklari (2016 SBB) tanınmiyor.
+  # Bkz. R/parse_helpers.R fix_enc() yorumu, known_issues.md §4.1.
+  lines <- fix_enc(lines)
+
   lines_clean <- clean_pdf_text(lines)
   split_into_speeches(
     lines        = lines_clean,

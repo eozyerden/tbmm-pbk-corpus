@@ -4,6 +4,7 @@
 suppressPackageStartupMessages({
   library(dplyr)
   library(tibble)
+  library(stringi)
 })
 
 # ---- Türkçe harf dönüşümleri ----
@@ -33,6 +34,24 @@ tr_totitle <- function(x) {
   paste(words, collapse = " ")
 }
 
+# ---- Bozuk karakter (encoding) düzeltmesi ----
+# [2026-06 TASINDI] scripts/17_encoding_duzelt.R'den buraya tasindi.
+# 13 SBB 2016 PDF'i, PDF->TXT cikarma asamasinda hatali bir font/encoding
+# eslesmesiyle uc Turkce karakteri bozmus (İ->Ġ, Ş->Ģ/ġ). Duzeltme daha once
+# segmentasyondan SONRA, ayri bir Asama 5 scriptinde uygulaniyordu; bu da
+# .SPEAKER_RE'nin bozuk konusmaci basliklarini (orn. "BAġKAN") tanimamasina
+# ve konusmalarin birbirine karismasina yol acti (bkz. known_issues.md §4.1).
+# Simdi segmentasyondan ONCE, ham TXT uzerinde uygulaniyor.
+# Guvenli: eslesme bulamazsa (bozuk karakter icermeyen dosyalarda) metni
+# degistirmez -- dogrulandi (2011 OWA dosyasinda identical(h, fix_enc(h))).
+GARBLED  <- c("Ģ", "ġ", "Ġ")   # Ģ  ġ  Ġ
+DUZELTME <- c("ş", "Ş", "İ")   # ş  Ş  İ
+
+fix_enc <- function(x) {
+  if (is.character(x)) stri_replace_all_fixed(x, GARBLED, DUZELTME, vectorize_all = FALSE)
+  else x
+}
+
 # ---- PDF satırlarını temizle ----
 # Girdi : character vector (readLines çıktısı)
 # Çıktı : temizlenmiş character vector (sayfa başlıkları, ToC, gürültü kaldırılmış)
@@ -52,10 +71,19 @@ clean_pdf_text <- function(lines) {
   }
 
   # 2. OWA sayfa başlığı (3 satır): "^\s*TBMM\s*$" + "Tutanak Müdürlüğü" + "Sayfa :"
+  # [2026-06 REVIZE] 2012+ OWA dosyalarında kurum adı "Tutanak Müdürlüğü"'nden
+  # "Tutanak Hizmetleri Başkanlığı"'na değişmiş; blok yapısı (3 satır) aynı
+  # kalmış. Eski desen yalnızca "Müdürlüğü" arıyordu, bu yüzden 2013-2015
+  # bütçe yıllarında (2012-2014 takvim yılı OWA dosyaları) altbilgi bloğu
+  # temizlenmeden konuşma metnine sızıyordu (korpusun %15'i, bkz. known_issues
+  # §4.2). Faz 2d teşhisiyle doğrulandı: 49/50 dosyada tam temizlik, 1
+  # dosyada kalan tek geçiş gerçek/meşru bir konuşma cümlesiydi (blok
+  # yapısına uymadığı için doğru şekilde korundu).
   keep <- rep(TRUE, length(lines))
   for (i in seq_len(length(lines) - 2L)) {
     if (grepl("^\\s*TBMM\\s*$",        lines[i],      perl = TRUE) &&
-        grepl("Tutanak\\s*Müdürlüğü",   lines[i + 1L], perl = TRUE) &&
+        grepl("Tutanak\\s*(Müdürlüğü|Hizmetleri\\s*Başkanlığı)",
+                                        lines[i + 1L], perl = TRUE) &&
         grepl("Sayfa\\s*:",             lines[i + 2L], perl = TRUE)) {
       keep[c(i, i + 1L, i + 2L)] <- FALSE
     }
@@ -83,6 +111,48 @@ clean_pdf_text <- function(lines) {
 
   # 8. Divider satırları
   lines <- lines[!grepl("^\\s*[-_]{3,}\\s*[O0]\\s*[-_]{3,}\\s*$", lines, perl = TRUE)]
+
+  # 9. [2026-06 EKLENDI, 2026-06 GENISLETILDI] SBB 2016 altbilgi bloğu:
+  # "T BM M" (harf-arası boşluklu TBMM varyantı) + "Tutanak Hizmetleri
+  # Başkanlığı" + [opsiyonel: "İncelenmemiş Tutanaktır"] + "Komisyon : ..."
+  # + "Tarih :.../... Sayfa: N". Yalnızca 2016 bütçe yılına ait SBB
+  # PDF'lerinde görülen, üçüncü/farklı bir altbilgi şablonu (bkz.
+  # known_issues.md §4.2) — mevcut diğer kurallardan hiçbiri bunu
+  # hedeflemiyordu.
+  # Tam envanterle sadece iki sabit-uzunluklu varyant doğrulandı: 4
+  # satırlık ana varyant (13 dosya, ~1.329 geçiş) ve "İncelenmemiş
+  # Tutanaktır" eklentili 5 satırlık varyant (yalnızca
+  # 20160128_gorusme_sbb_001.pdf, ~125 geçiş). Esnek/genel bir pencere
+  # yerine bilinçli olarak iki katı desen kullanılıyor — az sayıda sabit
+  # varyant varken esnek eşleşme meşru metni yanlışlıkla silme riski taşır.
+  keep9 <- rep(TRUE, length(lines))
+  i <- 1L
+  while (i <= length(lines) - 3L) {
+    if (grepl("^\\s*T\\s*B\\s*M\\s*M\\s*$",                    lines[i],      perl = TRUE) &&
+        grepl("^\\s*Tutanak\\s*Hizmetleri\\s*Başkanlığı\\s*$", lines[i + 1L], perl = TRUE)) {
+
+      # 5 satırlık varyant: + "İncelenmemiş Tutanaktır" + "Komisyon :" + "Tarih:...Sayfa:"
+      if (i + 4L <= length(lines) &&
+          grepl("ncelenmemiş\\s*Tutanaktır",   lines[i + 2L], perl = TRUE) &&
+          grepl("^\\s*Komisyon\\s*:",          lines[i + 3L], perl = TRUE) &&
+          grepl("^\\s*Tarih\\s*:.*Sayfa\\s*:", lines[i + 4L], perl = TRUE)) {
+        keep9[i:(i + 4L)] <- FALSE
+        i <- i + 5L
+        next
+      }
+
+      # 4 satırlık ana varyant: + "Komisyon :" + "Tarih:...Sayfa:"
+      if (i + 3L <= length(lines) &&
+          grepl("^\\s*Komisyon\\s*:",          lines[i + 2L], perl = TRUE) &&
+          grepl("^\\s*Tarih\\s*:.*Sayfa\\s*:", lines[i + 3L], perl = TRUE)) {
+        keep9[i:(i + 3L)] <- FALSE
+        i <- i + 4L
+        next
+      }
+    }
+    i <- i + 1L
+  }
+  lines <- lines[keep9]
 
   lines
 }
@@ -126,11 +196,24 @@ parse_speaker_line <- function(line) {
 classify_role <- function(konusmaci_ham) {
   x <- tr_toupper(trimws(konusmaci_ham))
 
+  # Burokrat desenleri genişletildi (2026-06):
+  # - MÜSTEŞAR\b ve GENEL MÜDÜR\b Türkçe eklerle eşleşmiyordu
+  #   (ASCII \b sınırı "MÜSTEŞARI"nin I'sını kelime karakteri
+  #   sayıyor). Sınır şartı kaldırıldı.
+  # - RTÜK, BDDK, SPK, Rekabet Kurumu, Kamu İhale, Kamu
+  #   Başdenetçisi, TMSF, TÜİK, TÜBİTAK, Başkan Yardımcısı,
+  #   Daire Başkanı, Denetçi, Strateji Geliştirme, Teftiş Kurulu
+  #   eksikti, eklendi.
+  # Etki: ~806 satır milletvekili -> burokrat.
   if (grepl(paste(
     "SAYIŞTAY BAŞKANI", "MERKEZ BANKASI",  "YÖK BAŞKANI",
     "KURUL BAŞKANI",    "BAŞKANLIĞI BAŞKANI",
-    "GENEL SEKRETERİ",  "GENEL MÜDÜR\\b",
-    "MÜSTEŞAR\\b",      "ENSTİTÜ",        "CUMHURBAŞKANLIĞI",
+    "GENEL SEKRETERİ",  "GENEL MÜDÜR",
+    "MÜSTEŞAR",         "ENSTİTÜ",        "CUMHURBAŞKANLIĞI",
+    "RTÜK", "BDDK", "SPK", "REKABET KURUMU", "KAMU İHALE",
+    "KAMU BAŞDENETÇİSİ", "TMSF", "TÜİK", "TÜBİTAK",
+    "BAŞKAN YARDIMCISI", "DAİRE BAŞKANI", "DENETÇİ",
+    "STRATEJİ GELİŞTİRME", "TEFTİŞ KURULU",
     sep = "|"), x, perl = TRUE))
     return("burokrat")
 

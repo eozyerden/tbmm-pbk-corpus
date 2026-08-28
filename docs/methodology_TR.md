@@ -9,7 +9,7 @@
 
 ## 1. Genel Bakış
 
-Bu veri seti, **Türkiye Büyük Millet Meclisi (TBMM) Plan ve Bütçe Komisyonu (PBK)** bütçe görüşme tutanaklarının yapılandırılmış, makineyle okunabilir bir korpusunu içerir. Korpus, **17 yıllık dönemi (2009-2025 bütçe yılları)** kapsar ve **223.408 konuşma satırı** barındırır.
+Bu veri seti, **Türkiye Büyük Millet Meclisi (TBMM) Plan ve Bütçe Komisyonu (PBK)** bütçe görüşme tutanaklarının yapılandırılmış, makineyle okunabilir bir korpusunu içerir. Korpus, **17 yıllık dönemi (2009-2025 bütçe yılları)** kapsar ve **231.923 konuşma satırı** barındırır.
 
 Türkiye'de PBK, merkezi yönetim bütçesinin parlamentoda görüşüldüğü ilk ve en detaylı kademedir. Bakanlık bütçeleri burada teker teker görüşülür; bakanlar, bürokratlar ve milletvekilleri uzun ve teknik tartışmalar yürütür. Bu görüşmeler genelde **Ekim-Kasım aylarında** yapılır ve bütçe kanunu Aralık ayında TBMM Genel Kurulu'na taşınır.
 
@@ -56,21 +56,21 @@ Ham PDF ve parquet dosyaları bu repoda **yer almaz**; Zenodo arşivinden indiri
 
 | Metrik | Değer |
 |---|---|
-| Toplam konuşma | 223.408 |
+| Toplam konuşma | 231.923 |
 | Toplam PDF (oturum tutanağı) | 294 |
 | Kapsanan bütçe yılları | 2009-2025 (2015 takvim yılında görüşme yapılmadı; 2015 bütçe yılı kapsama dahildir) |
 | Tarih aralığı | 17 Kasım 2008 – 29 Kasım 2024 |
-| Tek başına milletvekili sayısı | 1.184 |
+| Tek başına milletvekili sayısı | 858 benzersiz milletvekili (TBMM sicil numarası ile tespit) |
 | Bakan sayısı | ~100 (mv-bakan + atanmış teknokrat) |
-| PBK Başkanı sayısı | 26 |
+| PBK Başkanı sayısı | 6 kişi PBK'nin kendi seçilmiş başkanı olarak görev yaptı (bkz. `R/pbk_baskan_yil.R`); `rol = "baskan"` etiketli satırlarda ayrıca 13 TBMM Başkanı/Başkan Vekili de görünür (Genel Kurul başkanlık divanı üyeleri, PBK'nin kendi başkanı değil) — toplamda 19 benzersiz kişi |
 
 **Rol dağılımı:**
-- Milletvekili: %58.4
-- Başkan: %32.3
-- Bakan: %9.1
-- Bürokrat: %0.2
+- Milletvekili: %56.8
+- Başkan: %33.3
+- Bakan: %9.3
+- Bürokrat: %0.6
 
-**Metadata kapsama oranı:** %97.5 (sicil bazlı eşleşme)
+**Metadata kapsama oranı:** %98,0 (milletvekili rolü; başkan %100, bakan %99,3)
 
 ---
 
@@ -268,6 +268,7 @@ Tüm adımlar R'da kodlanmıştır. Adım adım açıklamalar için bkz. [`repli
 | Sürüm | Tarih | Notlar |
 |---|---|---|
 | v1.0 | Mayıs 2026 | İlk halka açık sürüm. 223.408 konuşma, %97.5 metadata kapsama. |
+| v1.1.0 | 2026-XX-XX | 231.923 konuşma, %98,0 (mv) — dört kusur düzeltildi (2016 segmentasyonu, 2013-2016 altbilgi sızıntısı, kurum temsilcisi rol sınıflandırması, 2015 başkan kimliği). |
 
 ---
 

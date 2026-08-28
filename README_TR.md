@@ -5,7 +5,7 @@
 [![Lisans: CC BY 4.0](https://img.shields.io/badge/Lisans%20(Veri)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
 
-TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, makineyle okunabilir korpusu. **17 yıl (2009-2025)**, **223.408 konuşma satırı**, milletvekili-parti-il metadata'sı bağlantılı.
+TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, makineyle okunabilir korpusu. **17 yıl (2009-2025)**, **231.923 konuşma satırı**, milletvekili-parti-il metadata'sı bağlantılı.
 
 **English README:** [README.md](README.md)
 
@@ -15,16 +15,17 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 
 - 294 PDF oturum tutanağı (196 SBB + 98 TBMM eski sistem)
 - 17 bütçe yılı (2009-2025). Not: Erken seçim takvimi nedeniyle 2015 takvim yılında PBK görüşmesi yapılmamıştır; ancak 2015 bütçe yılı korpusta yer alır (Kasım 2014'te görüşüldü).
-- 1.184 benzersiz milletvekili — parti, il, dönem metadata'lı
+- 858 benzersiz milletvekili (TBMM sicil numarası ile tespit) — parti, il, dönem metadata'lı
 - ~100 bakan (mv-bakan + atanmış teknokrat)
-- %97.5 metadata eşleşme oranı
+- Rol bazında kimlik eşleşmesi: milletvekili %98,0, başkan %100, bakan %99,3 (bkz. [docs/data_dictionary.md](docs/data_dictionary.md))
 
-> **Veri kalitesi uyarısı — 2016 bütçe yılı.** 2016 bütçe yılında
-> konuşmacı atfı güvenilir değildir: bir segmentasyon hatası nedeniyle
-> konuşmalar birbirine karışmış, o yılın kelime hacminin %71,7'si
-> etkilenmiştir. Konuşmacı düzeyindeki analizlerde 2016 hariç
-> tutulmalıdır. Metin içeriği sağlamdır. Ayrıntı için
-> [docs/known_issues.md](docs/known_issues.md) §4.1.
+> **Veri kalitesi.** 1.1.0 sürümü, v1.0.1'de bulunan dört hatayı
+> düzeltiyor: 2016 bütçe yılında konuşmacı segmentasyonu, 2013-2016
+> arasında altbilgi metni sızıntısı, kurumsal temsilcilerin rol
+> sınıflandırması ve 2015 için başkan kimliği. Bkz.
+> [CHANGELOG.md](CHANGELOG.md) ve
+> [docs/known_issues.md](docs/known_issues.md). v1.0.1 kullanıcıları
+> güncellemelidir.
 
 ## Hızlı Başlangıç
 

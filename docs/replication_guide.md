@@ -132,7 +132,7 @@ source(here::here("scripts", "06_parse_speeches.R"))
 
 Segments all plain text files into speaker turns. Applies role detection, name normalization, and `butce_yili` assignment.
 
-Expected output: `data/processed/konusmalar.parquet` (~223,408 rows)
+Expected output: `data/processed/konusmalar.parquet` (~231,923 rows)
 Runtime: 5-15 minutes depending on hardware.
 
 ---
@@ -202,7 +202,7 @@ After a full pipeline run:
 
 | File | Rows/Size | Description |
 |---|---|---|
-| `data/processed/konusmalar_metadata.parquet` | 223,408 rows | Main corpus |
+| `data/processed/konusmalar_metadata.parquet` | 231,923 rows | Main corpus |
 | `data/processed/mv_metadata.parquet` | 3,331 rows | MP roster (TBMM + manual) |
 | `data/processed/sbb_metadata.csv` | 196 rows | SBB PDF download log |
 | `data/processed/owa_metadata.csv` | 98 rows | OWA PDF download log |

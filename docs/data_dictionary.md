@@ -17,9 +17,33 @@
 | `parti_metinde` | string | Party as stated in parentheses in the transcript | `"AKP"` | NA if not stated; not normalized |
 | `metin` | string | Speech text | `"Teşekkür ederim..."` | UTF-8; encoding-corrected for 2016 |
 | `kelime_sayisi` | integer | Word count of speech | `312` | Computed after normalization |
-| `sicil` | integer | Permanent TBMM MP registration number | `6228` | NA for non-MPs and unmatched |
-| `parti` | string | Matched official party abbreviation | `"CHP"` | From TBMM roster; NA if unmatched |
+| `mv_sicil` | integer | Permanent TBMM registration number | `6228` | Populated for `rol = milletvekili` and `rol = baskan`. For ministers, identity is carried in `mv_sicil_bakan` or `bakan_id` instead. |
+| `mv_parti` | string | Matched official party abbreviation | `"CHP"` | From TBMM roster; NA if unmatched |
 | `tbmm_donem` | integer | TBMM legislative term | `24` | Range: 23-28 |
+| `bakan_id` | string | Identifier for appointed (non-MP) technocrat ministers | `"atanan_012"` | Populated only for `rol = bakan` |
+| `bakanlik_adi` | string | Ministry name for the minister speaking | `"MALİYE"` | Populated for all `rol = bakan` rows |
+| `bakanlik_baslangic` | date | Start of the minister's term | `2018-07-09` | Appointed ministers only |
+| `bakanlik_bitis` | date | End of the minister's term | `2021-04-21` | NA for ministers still in office at the end of the coverage period |
+| `mv_sicil_bakan` | integer | TBMM permanent identifier for ministers who are also MPs | `6228` | |
+| `mv_parti_bakan` | string | Party affiliation for ministers who are also MPs | `"AK Parti"` | |
+| `bakan_eslesme_tier` | string | Minister matching outcome | `"mv-bakan"` | One of: `mv-bakan`, `atanmış`, `eslesemedi` |
+
+### Identity linkage rates by role
+
+Linkage quality is measured differently per role — a single corpus-wide
+percentage is not meaningful, since the identity field itself differs by role
+(`mv_sicil` for MPs and chairs, `mv_sicil_bakan`/`bakan_id` for ministers).
+
+| Role | Rows | Linkage rate |
+|---|---|---|
+| MP (`milletvekili`) | 132,560 | 97.4% |
+| Chair (`baskan`) | 77,293 | 92.6%* |
+| Minister (`bakan`) | 21,549 | 99.3% |
+| Bureaucrat (`burokrat`) | 521 | not applicable |
+
+*The chair figure is depressed entirely by budget year 2015, where the
+committee chair could not be identified from the transcript body. All
+other years are at or near 100%.
 
 ### Notes on `rol` values
 

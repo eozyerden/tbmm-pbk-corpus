@@ -4,7 +4,7 @@
 # Kaynak doğrulama:
 #   23. dönem (2007-2011) — Sait Açba: Wikipedia + kullanıcı notu
 #   24. dönem (2011-2015) — Lütfi Elvan: AA.com.tr haberi (24 Şubat 2019'dan önce "ilk başkanlık": 2011-Aralık 2013)
-#     2015: doğrulanamadı (Elvan Aralık 2013'te bakan oldu; yerine kim geldi bilinmiyor)
+#     2015: Recai Berber (Manisa) — tutanak sayfa başlığı (17/17 dosya) + basın arşivi
 #   26. dönem (2015-2018) — Süreyya Sadi Bilgiç: TOSYÖV ziyareti (Nisan 2016) + Wikipedia
 #   27. dönem (2018-2023):
 #     2019: Süreyya Sadi Bilgiç (2019 bütçe görüşmeleri Ekim-Kasım 2018, Elvan Şubat 2019'da başladı)
@@ -26,7 +26,11 @@ pbk_baskan_yil <- tribble(
   2012L,  "LÜTFİ ELVAN",
   2013L,  "LÜTFİ ELVAN",
   2014L,  "LÜTFİ ELVAN",
-  2015L,  NA_character_,   # 24. dönem sonu: doğrulanamadı (Mehmet Ülger?)
+  # 2015: Recai BERBER (Manisa, sicil 6522). Kaynak: tutanak sayfa
+  # başlığı (17/17 dosya, 2014-10-23 - 2014-11-25) + basın arşivi
+  # (Haziran ve Kasım 2014). Elvan'ın Aralık 2013'te bakan olmasıyla
+  # boşalan koltuk; Bilgiç'in Kasım 2015'te başlamasına kadar.
+  2015L,  "RECAİ BERBER",
   # 26. dönem (Kasım 2015 – Haziran 2018)
   2016L,  "SÜREYYA SADİ BİLGİÇ",
   2017L,  "SÜREYYA SADİ BİLGİÇ",
