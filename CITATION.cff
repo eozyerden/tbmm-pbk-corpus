@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this dataset, please cite it as below."
-title: "TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)"
+title: "TBMM Plan and Budget Committee Discourse Corpus"
 abstract: "A structured corpus of Turkish parliamentary budget committee proceedings spanning 17 budget years (2009-2025), containing 231,923 speaker turns with linked MP-party-province metadata."
 authors:
   - family-names: Özyerden
@@ -9,7 +9,7 @@ authors:
     orcid: "https://orcid.org/0000-0003-3577-4236"
 type: dataset
 version: 1.1.0
-date-released: 2026-XX-XX
+date-released: 2026-08-28
 url: "https://github.com/eozyerden/tbmm-pbk-corpus"
 license: CC-BY-4.0
 doi: 10.5281/zenodo.20457565
@@ -18,8 +18,8 @@ identifiers:
     value: 10.5281/zenodo.20457565
     description: Concept DOI (always points to latest version)
   - type: doi
-    value: 10.5281/zenodo.20457566
-    description: Version v1.0.1 DOI
+    value: 10.5281/zenodo.22150634
+    description: Version v1.1.0 DOI
 keywords:
   - parliamentary corpus
   - Turkey

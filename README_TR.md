@@ -1,6 +1,6 @@
 # TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)
 
-[![DOI](https://zenodo.org/badge/DOI/PENDING.svg)](https://doi.org/PENDING)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans%20(Kod)-MIT-yellow.svg)](LICENSE)
 [![Lisans: CC BY 4.0](https://img.shields.io/badge/Lisans%20(Veri)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
@@ -19,10 +19,12 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 - ~100 bakan (mv-bakan + atanmış teknokrat)
 - Rol bazında kimlik eşleşmesi: milletvekili %98,0, başkan %100, bakan %99,3 (bkz. [docs/data_dictionary.md](docs/data_dictionary.md))
 
-> **Veri kalitesi.** 1.1.0 sürümü, v1.0.1'de bulunan dört hatayı
+> **Veri kalitesi.** 1.1.0 sürümü, v1.0.1'de bulunan beş hatayı
 > düzeltiyor: 2016 bütçe yılında konuşmacı segmentasyonu, 2013-2016
 > arasında altbilgi metni sızıntısı, kurumsal temsilcilerin rol
-> sınıflandırması ve 2015 için başkan kimliği. Bkz.
+> sınıflandırması, 2015 için başkan kimliği ve yanlış raporlanmış
+> benzersiz milletvekili sayısı (1.184 ham konuşmacı dizesi sayımıydı;
+> doğru rakam 858). Bkz.
 > [CHANGELOG.md](CHANGELOG.md) ve
 > [docs/known_issues.md](docs/known_issues.md). v1.0.1 kullanıcıları
 > güncellemelidir.
@@ -47,7 +49,7 @@ df |>
 
 ## Veri nerede?
 
-Ham PDF'ler (~670 MB) ve işlenmiş Parquet dosyaları (~160 MB) bu repoda **yer almaz** — Zenodo arşivinden indirilebilir: [DOI beklemede].
+Ham PDF'ler (~670 MB) ve işlenmiş Parquet dosyaları (~160 MB) bu repoda **yer almaz** — Zenodo arşivinden indirilebilir: [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, her zaman en güncel sürüme yönlendirir).
 
 Bu GitHub reposu şunları içerir:
 - Tüm pipeline kodu (scraping, parse, metadata eşleştirme)

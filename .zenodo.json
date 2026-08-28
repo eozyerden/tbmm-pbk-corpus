@@ -1,0 +1,44 @@
+{
+  "title": "TBMM Plan and Budget Committee Discourse Corpus",
+  "description": "A structured, machine-readable corpus of the Turkish Grand National Assembly (TBMM) Plan and Budget Committee budget proceedings, covering budget years 2009-2025. See the repository README and CHANGELOG for the full description and version history.",
+  "upload_type": "dataset",
+  "language": "tur",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "creators": [
+    {
+      "name": "Özyerden, Emre",
+      "orcid": "0000-0003-3577-4236"
+    }
+  ],
+  "keywords": [
+    "parliamentary corpus",
+    "Turkey",
+    "Türkiye",
+    "TBMM",
+    "Grand National Assembly of Turkey",
+    "Plan and Budget Committee",
+    "fiscal discourse",
+    "budget committee",
+    "budget proceedings",
+    "budget deliberations",
+    "parliamentary debates",
+    "text as data",
+    "Turkish NLP",
+    "computational political science",
+    "computational social science",
+    "legislative speeches",
+    "comparative politics",
+    "political economy",
+    "fiscal policy",
+    "parliamentary procedure"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.19713325",
+      "relation": "references",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    }
+  ]
+}

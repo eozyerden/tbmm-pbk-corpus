@@ -4,7 +4,7 @@ All notable changes to this dataset will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
-## [1.1.0] - 2026-XX-XX
+## [1.1.0] - 2026-08-28
 
 ### Fixed
 - Speaker segmentation failure in budget year 2016. The encoding
@@ -40,6 +40,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Documented
 - Legacy TBMM transcript endpoint behaviour (known_issues.md)
 - Unspaced speaker-dash transitions as a background parser limitation
+- DOI (this version): 10.5281/zenodo.22150634
 
 ## [1.0.1] - 2026-05-30
 

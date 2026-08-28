@@ -1,6 +1,6 @@
 # TBMM Budget Committee Discourse Corpus (2009-2025)
 
-[![DOI](https://zenodo.org/badge/DOI/PENDING.svg)](https://doi.org/PENDING)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 [![License: MIT](https://img.shields.io/badge/License%20(Code)-MIT-yellow.svg)](LICENSE)
 [![License: CC BY 4.0](https://img.shields.io/badge/License%20(Data)-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--3577--4236-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-3577-4236)
@@ -21,10 +21,12 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 - **~100 ministers** (both MP-ministers and appointed technocrats)
 - **Identity linkage by role: MP 98.0%, chair 100%, minister 99.3%** (see [docs/data_dictionary.md](docs/data_dictionary.md))
 
-> **Data quality.** Version 1.1.0 corrects four defects present in
+> **Data quality.** Version 1.1.0 corrects five defects present in
 > v1.0.1, affecting speaker segmentation in budget year 2016, footer
 > text in 2013-2016, role classification of institutional
-> representatives, and chair identification for 2015. See
+> representatives, chair identification for 2015, and a misreported
+> unique MP count (1,184 was a count of raw speaker strings; the
+> correct figure is 858). See
 > [CHANGELOG.md](CHANGELOG.md) and
 > [docs/known_issues.md](docs/known_issues.md). Users of v1.0.1
 > should migrate.
@@ -73,7 +75,7 @@ Raw PDFs and processed Parquet files are **not stored in this repository**. See 
 
 The processed Parquet files (~160 MB) and raw PDFs (~670 MB) are archived on Zenodo:
 
-> **Zenodo archive:** [DOI placeholder — link will be added at publication]
+> **Zenodo archive:** [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, always resolves to the latest version)
 
 Download the archive and extract it to the project root. The extracted directories (`data/raw/`, `data/processed/`) are listed in `.gitignore` and will not be committed.
 
