@@ -16,7 +16,8 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 - 294 PDF oturum tutanağı (196 SBB + 98 TBMM eski sistem)
 - 17 bütçe yılı (2009-2025). Not: Erken seçim takvimi nedeniyle 2015 takvim yılında PBK görüşmesi yapılmamıştır; ancak 2015 bütçe yılı korpusta yer alır (Kasım 2014'te görüşüldü).
 - 858 benzersiz milletvekili (TBMM sicil numarası ile tespit) — parti, il, dönem metadata'lı
-- ~100 bakan (mv-bakan + atanmış teknokrat)
+- 98 bakan — 80 milletvekili-bakan, 18 atanmış teknokrat
+- 6 komisyon başkanı
 - Rol bazında kimlik eşleşmesi: milletvekili %98,0, başkan %100, bakan %99,3 (bkz. [docs/data_dictionary.md](docs/data_dictionary.md))
 
 > **Veri kalitesi.** 1.1.0 sürümü, v1.0.1'de bulunan beş hatayı
@@ -40,16 +41,23 @@ df <- read_parquet("data/processed/konusmalar_metadata.parquet")
 # Yıl bazında konuşma sayısı
 df |> count(butce_yili)
 
-# Parti bazında kelime sayısı
+# Parti bazında kelime sayısı (parti bilgisi "mv_parti" sütununda, "parti" değil)
 df |>
-  filter(!is.na(parti)) |>
-  group_by(parti) |>
+  filter(!is.na(mv_parti)) |>
+  group_by(mv_parti) |>
   summarise(toplam_kelime = sum(kelime_sayisi))
 ```
 
 ## Veri nerede?
 
-Ham PDF'ler (~670 MB) ve işlenmiş Parquet dosyaları (~160 MB) bu repoda **yer almaz** — Zenodo arşivinden indirilebilir: [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, her zaman en güncel sürüme yönlendirir).
+İşlenmiş korpus ve ham kaynak PDF'ler Zenodo'da iki ayrı arşiv olarak yayımlanır (kayıt [22150634](https://zenodo.org/records/22150634)); bu repoda **yer almazlar**:
+
+- **İşlenmiş veri** — `tbmm-pbk-corpus-data-v1.1.0.zip`: indirilen (sıkıştırılmış) boyut 76,0 MB; açıldığında ~86 MB (doğrulandı). İçinde `konusmalar_metadata.parquet`, `mv_metadata.parquet`, `baseline_v1.1.0.csv`, veri sözlüğü ve lisans dosyası bulunur.
+- **Ham kaynak PDF'ler** — `tbmm-pbk-corpus-raw-v1.1.0.zip`: indirilen (sıkıştırılmış) boyut 320,5 MB. Açılmış boyutu v1.1.0 için bu görevde ayrıca doğrulanmadı; kesin bir açılmış-boyut rakamı verilene kadar yaklaşık kabul edilmelidir.
+
+> **Zenodo arşivi:** [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, her zaman en güncel sürüme yönlendirir). Güncel sürüm: **v1.1.0** — sürüme özel DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
+
+Her iki zip de **düz** (flat) yapıda açılır; arşiv içinde `data/processed/` veya `data/raw/` alt klasörü yoktur. İndirip açtıktan sonra bu klasörleri (yoksa) oluşturup dosyaları içine taşıyın, böylece yollar bu README ve pipeline betikleriyle eşleşir. Her iki klasör de `.gitignore` içinde listelidir ve commit'lenmez.
 
 Bu GitHub reposu şunları içerir:
 - Tüm pipeline kodu (scraping, parse, metadata eşleştirme)
@@ -71,6 +79,10 @@ Bu GitHub reposu şunları içerir:
 Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
 Söylem Korpusu (2009-2025) [Veri seti]. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 ```
+
+Yukarıdaki atıf concept DOI'yi (10.5281/zenodo.20457565) kullanır; bu DOI her zaman en güncel sürüme yönlendirir. Analizinizde kullandığınız tam sürümü belirtmek isterseniz v1.1.0'ı doğrudan kaynak gösterin: DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
+
+Makine tarafından okunabilir atıf [`CITATION.cff`](CITATION.cff) dosyasında mevcuttur.
 
 ## Lisans
 

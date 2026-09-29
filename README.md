@@ -18,7 +18,8 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 - **231,923 speaker turns** across 294 committee sessions
 - **17 budget years** (2009-2025). Note: budget deliberations did not take place in calendar year 2015 due to early elections; however, the 2015 budget year is included in the corpus (deliberated in late 2014).
 - **858 unique MPs** (identified by TBMM permanent identifier) with linked party, province, and term metadata
-- **~100 ministers** (both MP-ministers and appointed technocrats)
+- **98 ministers** — 80 MP-ministers, 18 appointed technocrats
+- **6 committee chairs** across the corpus period
 - **Identity linkage by role: MP 98.0%, chair 100%, minister 99.3%** (see [docs/data_dictionary.md](docs/data_dictionary.md))
 
 > **Data quality.** Version 1.1.0 corrects five defects present in
@@ -42,16 +43,16 @@ df <- read_parquet("data/processed/konusmalar_metadata.parquet")
 # Speeches per budget year
 df |> count(butce_yili)
 
-# Word counts by party
+# Word counts by party (party affiliation is in `mv_parti`, not `parti`)
 df |>
-  filter(!is.na(parti)) |>
-  group_by(parti) |>
+  filter(!is.na(mv_parti)) |>
+  group_by(mv_parti) |>
   summarise(total_words = sum(kelime_sayisi)) |>
   arrange(desc(total_words))
 
 # Opposition MP speeches in the 2020 budget hearings
 df |>
-  filter(butce_yili == 2020, rol == "milletvekili", parti %in% c("CHP", "HDP", "İYİP"))
+  filter(butce_yili == 2020, rol == "milletvekili", mv_parti %in% c("CHP", "HDP", "İYİP"))
 ```
 
 ## Repository structure
@@ -73,11 +74,14 @@ Raw PDFs and processed Parquet files are **not stored in this repository**. See 
 
 ## Getting the data
 
-The processed Parquet files (~160 MB) and raw PDFs (~670 MB) are archived on Zenodo:
+The processed corpus and the raw source PDFs are published as two separate archives on Zenodo (record [22150634](https://zenodo.org/records/22150634)):
 
-> **Zenodo archive:** [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, always resolves to the latest version)
+- **Processed data** — `tbmm-pbk-corpus-data-v1.1.0.zip`: 76.0 MB as downloaded (compressed); ~86 MB once extracted (verified). Contains `konusmalar_metadata.parquet`, `mv_metadata.parquet`, `baseline_v1.1.0.csv`, a data dictionary, and a license file.
+- **Raw source PDFs** — `tbmm-pbk-corpus-raw-v1.1.0.zip`: 320.5 MB as downloaded (compressed). Extracted size was not independently re-verified for v1.1.0; treat any uncompressed-size figure as approximate until confirmed.
 
-Download the archive and extract it to the project root. The extracted directories (`data/raw/`, `data/processed/`) are listed in `.gitignore` and will not be committed.
+> **Zenodo archive:** [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, always resolves to the latest version). Current version: **v1.1.0** — version-specific DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
+
+Both zip files extract **flat** (no `data/processed/` or `data/raw/` subfolders inside the archive). After extracting, create `data/processed/` and `data/raw/` if they do not already exist and move the files there, so paths match this README and the pipeline scripts. Both directories are listed in `.gitignore` and will not be committed.
 
 This GitHub repository contains:
 - All code (scraping, parsing, metadata matching)
@@ -104,6 +108,8 @@ If you use this corpus in your research, please cite:
 Özyerden, E. (2026). TBMM Budget Committee Discourse Corpus (2009-2025) [Dataset].
 Zenodo. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 ```
+
+The citation above uses the concept DOI (10.5281/zenodo.20457565), which always resolves to the latest version. To cite the exact version used in your analysis, cite v1.1.0 directly: DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 
 A machine-readable citation is available in [`CITATION.cff`](CITATION.cff).
 
