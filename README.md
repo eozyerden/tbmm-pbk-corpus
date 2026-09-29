@@ -1,4 +1,4 @@
-# TBMM Budget Committee Discourse Corpus (2009-2025)
+# TBMM Plan and Budget Committee Discourse Corpus (2009-2025)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 [![License: MIT](https://img.shields.io/badge/License%20(Code)-MIT-yellow.svg)](LICENSE)
@@ -15,11 +15,11 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 
 ## What's in this corpus
 
-- **231,923 speaker turns** across 294 committee sessions
+- **231,923 speaker turns** across 294 source PDFs
 - **17 budget years** (2009-2025). Note: budget deliberations did not take place in calendar year 2015 due to early elections; however, the 2015 budget year is included in the corpus (deliberated in late 2014).
 - **858 unique MPs** (identified by TBMM permanent identifier) with linked party, province, and term metadata
 - **98 ministers** — 80 MP-ministers, 18 appointed technocrats
-- **6 committee chairs** across the corpus period
+- **6 committee chairs** (plus 13 Speakers and Deputy Speakers of the Assembly who presided occasionally) across the corpus period
 - **Identity linkage by role: MP 98.0%, chair 100%, minister 99.3%** (see [docs/data_dictionary.md](docs/data_dictionary.md))
 
 > **Data quality.** Version 1.1.0 corrects five defects present in
@@ -77,8 +77,8 @@ Raw PDFs and processed Parquet files are **not stored in this repository**. See 
 
 The processed corpus and the raw source PDFs are published as two separate archives on Zenodo (record [22150634](https://zenodo.org/records/22150634)):
 
-- **Processed data** — `tbmm-pbk-corpus-data-v1.1.0.zip`: 76.0 MB as downloaded (compressed); ~86 MB once extracted (verified). Contains `konusmalar_metadata.parquet`, `mv_metadata.parquet`, `baseline_v1.1.0.csv`, a data dictionary, and a license file.
-- **Raw source PDFs** — `tbmm-pbk-corpus-raw-v1.1.0.zip`: 320.5 MB as downloaded (compressed). Extracted size was not independently re-verified for v1.1.0; treat any uncompressed-size figure as approximate until confirmed.
+- **Processed data** — `tbmm-pbk-corpus-data-v1.1.0.zip`: 76.0 MB as downloaded (compressed); ~86 MB once extracted. Contains `konusmalar_metadata.parquet`, `mv_metadata.parquet`, `baseline_v1.1.0.csv`, a data dictionary, and a license file.
+- **Raw source PDFs** — `tbmm-pbk-corpus-raw-v1.1.0.zip`: 320.5 MB as downloaded (compressed).
 
 > **Zenodo archive:** [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) (concept DOI, always resolves to the latest version). Current version: **v1.1.0** — version-specific DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 
