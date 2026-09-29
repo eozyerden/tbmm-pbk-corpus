@@ -7,8 +7,7 @@ This directory contains:
 Manual additions and corrections necessary for replication. These files are version-controlled because they represent research decisions, not raw data:
 
 - `mv_metadata_manuel.csv` — Members of parliament not present in TBMM's official roster (e.g., F.M. Aslanoğlu's 24th term, K. Kurt's 24th term)
-- `bakan_manuel.csv` — Non-MP ministers (technocrats appointed by the Council of Ministers)
-- `atanmis_bakanlar_manuel.csv` — Same as above with different naming (legacy)
+- `bakan_manuel.csv` — Non-MP ministers (technocrats appointed by the Council of Ministers), 18 rows
 
 ## `metadata/` — Scraping metadata (CSVs, tracked in git)
 
