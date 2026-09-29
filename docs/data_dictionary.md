@@ -69,15 +69,17 @@ PBK budget hearings occur in October-November for the **following year's** budge
 
 ## `mv_metadata.parquet` — MP roster
 
+Scraped by `scripts/11_tbmm_mv_scrape.R` from TBMM's MP-list pages (`mv_liste_eskiler`), one row per MP per term: 3,329 rows, 7 columns, no missing values (measured from the published v1.1.0 data). The records in `data/manuel/mv_metadata_manuel.csv` are not in this file; the matching script appends them at match time. Columns are listed in file order.
+
 | Column | Type | Description | Example | Notes |
 |---|---|---|---|---|
-| `sicil` | integer | Permanent TBMM registration number | `6228` | Stable across terms and party changes |
-| `isim_ham` | string | Full name as in TBMM database | `"Ferit Mevlüt ASLANOĞLU"` | Mixed case |
-| `isim_norm` | string | Normalized uppercase name | `"FERİT MEVLÜT ASLANOĞLU"` | Used for matching |
-| `parti` | string | Party abbreviation | `"CHP"` | As of the listed term |
-| `il` | string | Province | `"MALATYA"` | Uppercase Turkish |
-| `donem` | integer | TBMM legislative term | `23` | Range: 23-28 |
-| `kaynak` | string | Record source | `"tbmm"` or `"manuel"` | manuel = added via `mv_metadata_manuel.csv` |
+| `donem` | integer | TBMM legislative term of the listing | `23` | Range: 23-28; 535-592 rows per term |
+| `sicil` | integer | Permanent TBMM registration number | `6228` | Unique within a term. 823 of the 1,937 distinct values appear in more than one term, always under the same name |
+| `isim_ham` | string | Full name as listed by TBMM | `"Ferit Mevlüt ASLANOĞLU"` | Given names in mixed case, surname in capitals; not normalized |
+| `il` | string | Province heading under which the MP is listed for that term | `"MALATYA"` | Uppercase Turkish; 81 distinct values. Differs between terms for 108 sicil values |
+| `parti` | string | Party label as shown in the TBMM listing | `"CHP"` | At most 10 characters, so some labels are cut short (`YENİDEN RE`, `MEMLEKET P`). Differs between terms for 66 sicil values. TODO(Emre): state whether this is the party at election, at end of term or at scrape time |
+| `kaynak_url` | string | TBMM page the record was scraped from | `"https://www5.tbmm.gov.tr/develop/owa/milletvekillerimiz_sd.mv_liste_eskiler?p_donem_kodu=23"` | One URL per term; `p_donem_kodu` is the term number |
+| `cekim_tarihi` | date | Date the page was scraped | `2026-05-24` | Same value in every row |
 
 ### Coverage
 
