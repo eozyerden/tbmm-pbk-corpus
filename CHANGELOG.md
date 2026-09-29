@@ -41,6 +41,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Legacy TBMM transcript endpoint behaviour (known_issues.md)
 - Unspaced speaker-dash transitions as a background parser limitation
 - DOI (this version): 10.5281/zenodo.22150634
+- Quality note: `docs/quality_note_v1.1.0.md`, an account of the five
+  defects and the validation suite.
+- Data dictionary and methodology figures aligned with the published
+  v1.1.0 data (linkage by role, role counts, minister and chair counts).
+- No column was renamed in v1.1.0. The main-corpus columns are `mv_sicil`
+  and `mv_parti`, as in the published v1.0.1 data; the v1.0.1 data
+  dictionary had listed them as `sicil` and `parti`.
 
 ## [1.0.1] - 2026-05-30
 
