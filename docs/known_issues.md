@@ -89,9 +89,8 @@ Ombudsman, TMSF, TÜİK and TÜBİTAK, along with the titles
 and *Teftiş Kurulu*.
 
 The boundary assertions were removed and the pattern list extended
-from 10 to 24 terms: fourteen additions, of which nine are institutions
-and five are titles (the release notes call all fourteen
-"institutions"). 806 turns moved from `milletvekili` to `burokrat`. The
+from 10 to 24 terms by adding nine institutions and five official
+titles. 806 turns moved from `milletvekili` to `burokrat`. The
 bureaucrat count, measured from the published data, is 406 turns in
 v1.0.1 and 1,327 in v1.1.0; the totals differ by more than the 806
 reclassified turns, and this document does not break down the remainder.

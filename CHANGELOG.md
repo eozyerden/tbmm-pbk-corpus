@@ -14,12 +14,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
   Two footer templates were not matched by the cleaning rules.
   5,268 turns affected.
 - Role classification for institutional representatives. Word-boundary
-  assertions failed against Turkish suffixes, and fourteen institutions
-  were missing from the pattern list. 806 turns reclassified from
-  `milletvekili` to `burokrat`.
+  assertions failed against Turkish suffixes, and nine institutions and
+  five official titles were missing from the pattern list, which now has
+  24 terms. 806 turns reclassified from `milletvekili` to `burokrat`.
 - Committee chair for budget year 2015 was unidentified; the lookup
-  table gap is now filled. Chair linkage for that year rose from 0.5%
-  to 100%.
+  table gap is now filled. In v1.0.1 no chair-role row carried an
+  identifier; in v1.1.0, 77,292 of 77,293 do.
 - Unique MP count was reported as 1,184 in documentation up to
   v1.0.1. That was a count of raw speaker strings, not people; the
   correct figure is 858. See known_issues.md.
