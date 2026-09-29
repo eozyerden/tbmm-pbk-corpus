@@ -36,14 +36,18 @@ percentage is not meaningful, since the identity field itself differs by role
 
 | Role | Rows | Linkage rate |
 |---|---|---|
-| MP (`milletvekili`) | 132,560 | 97.4% |
-| Chair (`baskan`) | 77,293 | 92.6%* |
-| Minister (`bakan`) | 21,549 | 99.3% |
-| Bureaucrat (`burokrat`) | 521 | not applicable |
+| MP (`milletvekili`) | 131,755 | 98.0% |
+| Chair (`baskan`) | 77,293 | 100%* |
+| Minister (`bakan`) | 21,548 | 99.3% |
+| Bureaucrat (`burokrat`) | 1,327 | not applicable |
 
-*The chair figure is depressed entirely by budget year 2015, where the
-committee chair could not be identified from the transcript body. All
-other years are at or near 100%.
+Values are measured from the published v1.1.0 data (231,923 rows). MP and
+chair linkage are the share of turns with a non-missing `mv_sicil`; minister
+linkage is the share with `bakan_eslesme_tier` other than `eslesemedi`.
+
+*77,292 of 77,293 chair-role turns; the exception is one 2023 turn recorded
+as `BAŞKAN VEKİLİ` without a name. In v1.0.1 the chair columns were not
+populated; see [quality_note_v1.1.0.md](quality_note_v1.1.0.md).
 
 ### Notes on `rol` values
 
