@@ -44,13 +44,10 @@ Open an R session with the project root as the working directory (open the `.Rpr
 
 If you want to start from the processed Parquet files (skipping scraping and parsing):
 
-1. Download the Zenodo archive: [DOI placeholder]
-2. Extract to the project root. The archive contains:
-   - `data/raw/pdf/sbb/` — 196 SBB PDFs (~580 MB)
-   - `data/raw/pdf/owa/` — 98 OWA PDFs (~90 MB)
-   - `data/raw/txt/` — plain text extracts of all PDFs
-   - `data/processed/konusmalar_metadata.parquet` — main corpus
-   - `data/processed/mv_metadata.parquet` — MP roster
+1. Download from the Zenodo record ([10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565), concept DOI; current version v1.1.0, [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634)). The data and the raw files are separate archives:
+   - `tbmm-pbk-corpus-data-v1.1.0.zip` — `konusmalar_metadata.parquet` (main corpus), `mv_metadata.parquet` (MP roster), `baseline_v1.1.0.csv` (reference metrics for `scripts/99_validate.R`), a data dictionary and a license file
+   - `tbmm-pbk-corpus-raw-v1.1.0.zip` — the raw source files
+2. The data archive extracts flat, without a `data/processed/` prefix. Create `data/processed/` and `data/raw/` in the project root and move the files there (data archive into `data/processed/`, raw archive into `data/raw/`).
 
 If you want to reproduce from scratch, proceed with Steps 4-11 below.
 
@@ -182,7 +179,7 @@ source(here::here("scripts", "16_encoding_tani.R"))   # Identify 2016 encoding i
 source(here::here("scripts", "17_encoding_duzelt.R")) # Apply character-level corrections
 ```
 
-These scripts identify and fix the 2016 PDF encoding corruption (Ģ → ş, ġ → Ş, Ġ → İ). Step 17 updates `konusmalar_metadata.parquet` in place.
+These scripts identify and fix the 2016 PDF encoding corruption (Ģ → ş, ġ → Ş, Ġ → İ). Step 17 updates `konusmalar_metadata.parquet` in place. From v1.1.0 the same repair also runs inside the parser (`fix_enc()` in `R/parse_helpers.R`, called from `scripts/06_parse_speeches.R`), before speaker segmentation.
 
 ---
 
@@ -193,6 +190,29 @@ source(here::here("scripts", "18_kapsama_analizi.R"))
 ```
 
 Three-part coverage check: session-number sequencing, ministry detection, volume sanity. Produces `reports/18_kapsama_analizi_raporu.md`.
+
+---
+
+### Validate the output (v1.1.0)
+
+`scripts/99_validate.R` is the standing validation suite. Run it after any pipeline change. It needs the packages `arrow` and `dplyr`, the corpus at `data/processed/konusmalar_metadata.parquet`, and the baseline `data/processed/baseline_v1.1.0.csv`. The baseline is in the Zenodo data archive (`tbmm-pbk-corpus-data-v1.1.0.zip`); it is not in this repository.
+
+From the project root:
+
+```
+Rscript scripts/99_validate.R
+```
+
+Or from an R session:
+
+```r
+source("scripts/99_validate.R")
+res <- validate_corpus(
+  parquet_yol  = "data/processed/konusmalar_metadata.parquet",
+  baseline_yol = "data/processed/baseline_v1.1.0.csv")
+```
+
+It prints per-year metrics, residue checks, flags and, when the baseline is given, a comparison against it; on the published v1.1.0 data every difference is zero. See [`quality_note_v1.1.0.md`](quality_note_v1.1.0.md) for what the suite checks.
 
 ---
 

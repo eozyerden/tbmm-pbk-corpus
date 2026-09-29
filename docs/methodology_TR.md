@@ -1,8 +1,7 @@
-# TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)
+# TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu
 
-**Sürüm:** v1.0
+**Sürüm:** v1.1.0 (28 Ağustos 2026); belge revizyonu 29 Eylül 2026
 **Hazırlayan:** Emre Özyerden (eozyerden@gmail.com)
-**Son güncelleme:** Mayıs 2026
 **Lisans:** Kod: MIT | Veri ve dokümantasyon: CC BY 4.0
 
 ---
@@ -48,9 +47,16 @@ Ham PDF ve parquet dosyaları bu repoda **yer almaz**; Zenodo arşivinden indiri
 | `parti_metinde` | string | Tutanakta belirtilen parti |
 | `metin` | string | Konuşma metni |
 | `kelime_sayisi` | int | Konuşmadaki kelime sayısı |
-| `sicil` | int | TBMM kalıcı milletvekili sicil numarası (varsa) |
-| `parti` | string | Eşleştirilmiş resmi parti (varsa) |
+| `mv_sicil` | int | TBMM kalıcı milletvekili sicil numarası (varsa; milletvekili ve başkan satırlarında) |
+| `mv_parti` | string | Eşleştirilmiş resmi parti (varsa) |
 | `tbmm_donem` | int | TBMM dönem numarası (23-28) |
+| `bakan_id` | string | Atanmış (mv olmayan) bakanlar için kimlik (yalnızca `rol = "bakan"`) |
+| `bakanlik_adi` | string | Konuşan bakanın bakanlık adı |
+| `bakanlik_baslangic`, `bakanlik_bitis` | date | Bakanlık görev başlangıç ve bitişi |
+| `mv_sicil_bakan`, `mv_parti_bakan` | int, string | Aynı zamanda milletvekili olan bakanlar için sicil ve parti |
+| `bakan_eslesme_tier` | string | Bakan eşleşme sonucu: `mv-bakan`, `atanmış`, `eslesemedi` |
+
+Son yedi sütun v1.1.0'da eklenmiştir; tam sütun tanımları için bkz. [`data_dictionary.md`](data_dictionary.md).
 
 ### 2.3 Tanımlayıcı İstatistikler
 
@@ -61,7 +67,7 @@ Ham PDF ve parquet dosyaları bu repoda **yer almaz**; Zenodo arşivinden indiri
 | Kapsanan bütçe yılları | 2009-2025 (2015 takvim yılında görüşme yapılmadı; 2015 bütçe yılı kapsama dahildir) |
 | Tarih aralığı | 17 Kasım 2008 – 29 Kasım 2024 |
 | Tek başına milletvekili sayısı | 858 benzersiz milletvekili (TBMM sicil numarası ile tespit) |
-| Bakan sayısı | ~100 (mv-bakan + atanmış teknokrat) |
+| Bakan sayısı | 98 (80 milletvekili-bakan, 18 atanmış teknokrat) |
 | PBK Başkanı sayısı | 6 kişi PBK'nin kendi seçilmiş başkanı olarak görev yaptı (bkz. `R/pbk_baskan_yil.R`); `rol = "baskan"` etiketli satırlarda ayrıca 13 TBMM Başkanı/Başkan Vekili de görünür (Genel Kurul başkanlık divanı üyeleri, PBK'nin kendi başkanı değil) — toplamda 19 benzersiz kişi |
 
 **Rol dağılımı:**
@@ -151,7 +157,7 @@ Parse aşamasında regex'lerle bu formatlar normalize edilmiştir:
 |---|---|
 | `baskan` | "BAŞKAN", "OTURUM BAŞKANI" gibi sıfatlar |
 | `bakan` | "X BAKANI", "BAKAN X" formatı |
-| `burokrat` | "MÜSTEŞAR", "GENEL MÜDÜR", "BAŞKAN YARDIMCISI" gibi |
+| `burokrat` | 24 ifadeden herhangi biri: "MÜSTEŞAR", "GENEL MÜDÜR", "SAYIŞTAY BAŞKANI", "RTÜK", "BDDK", "SPK", "REKABET KURUMU", "BAŞKAN YARDIMCISI", "DAİRE BAŞKANI" gibi (v1.1.0'da genişletildi; bkz. [`quality_note_v1.1.0.md`](quality_note_v1.1.0.md)) |
 | `milletvekili` | İl bilgisi parantez içinde belirtilmiş satırlar (yukarıdakilerden değilse) |
 
 ### 4.4 Düzeltilmiş Parser Hataları (Yayın Öncesi)
@@ -165,12 +171,12 @@ Parse aşamasında regex'lerle bu formatlar normalize edilmiştir:
 
 ### 4.5 Encoding Düzeltmesi (2016 yılı)
 
-2016 yılına ait 13 SBB PDF'inde, PDF oluşturma sırasındaki encoding hatası nedeniyle bazı Türkçe karakterler bozulmuştur:
+2016 yılına ait 13 SBB PDF'inde bozuk bir yazı tipi/kodlama eşlemesi bulunur ve metin çıkarıldığında bazı Türkçe karakterler bozuk görünür:
 - `Ģ` → `ş` (92.465 karakter)
 - `ġ` → `Ş` (10.812 karakter)
 - `Ġ` → `İ` (15.319 karakter)
 
-Toplam 118.596 karakter düzeltilmiştir. Düzeltme öncesi sürüm Zenodo arşivinde korunmaktadır.
+Toplam 118.596 karakter düzeltilmiştir. v1.1.0'dan itibaren düzeltme (`R/parse_helpers.R` içindeki `fix_enc()`) konuşmacı segmentasyonundan önce, parser içinde uygulanır; v1.0.1'de segmentasyondan sonra uygulanıyordu ve bu, [`quality_note_v1.1.0.md`](quality_note_v1.1.0.md) belgesinde anlatılan 2016 segmentasyon hatasına yol açtı.
 
 ### 4.6 Şehir Adı Normalizasyonu
 
@@ -190,7 +196,7 @@ TBMM'nin kendi veritabanında eksik olduğu tespit edilen milletvekilleri için 
 | Kazım Kurt | 24. dönem CHP Eskişehir sicil 6713 (TBMM kaydı var ama scraper kaçırmış) | TBMM mv detay sayfası |
 | Adil Kurt = Adil Zozani | İsim alias tablosu (mahkeme kararıyla soyadı değişikliği) | Mahkeme kararı haberleri |
 | Nimet Çubukçu | "atanmış bakan" listesinden çıkarıldı (aslında mv'ydi) | TBMM kaydı |
-| Berat Albayrak | Parser typo'sundan kaynaklı "BERAK ALBAYRAK" düzeltmesi (103 satır) | Manuel düzeltme |
+| Berat Albayrak | Parser typo'sundan kaynaklı "BERAK ALBAYRAK" düzeltmesi (1 satır; yayımlanmış v1.1.0 verisinden ölçüldü) | Manuel düzeltme |
 
 ### 4.8 Atanmış Bakan Listesi
 
@@ -268,7 +274,7 @@ Tüm adımlar R'da kodlanmıştır. Adım adım açıklamalar için bkz. [`repli
 | Sürüm | Tarih | Notlar |
 |---|---|---|
 | v1.0 | Mayıs 2026 | İlk halka açık sürüm. 223.408 konuşma, %97.5 metadata kapsama. |
-| v1.1.0 | 2026-XX-XX | 231.923 konuşma, %98,0 (mv) — dört kusur düzeltildi (2016 segmentasyonu, 2013-2016 altbilgi sızıntısı, kurum temsilcisi rol sınıflandırması, 2015 başkan kimliği). |
+| v1.1.0 | 2026-08-28 | 231.923 konuşma, %98,0 (mv) — beş kusur düzeltildi (2016 segmentasyonu, 2013-2016 altbilgi sızıntısı, kurum temsilcisi rol sınıflandırması, 2015 başkan kimliği, yanlış raporlanan benzersiz milletvekili sayısı). Ayrıntı: [`quality_note_v1.1.0.md`](quality_note_v1.1.0.md). |
 
 ---
 
@@ -276,8 +282,11 @@ Tüm adımlar R'da kodlanmıştır. Adım adım açıklamalar için bkz. [`repli
 
 ```
 Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
-Söylem Korpusu (2009-2025) [Veri seti]. DOI: [beklemede]
+Söylem Korpusu (2009-2025) [Veri seti]. Zenodo.
+https://doi.org/10.5281/zenodo.20457565
 ```
+
+Concept DOI (10.5281/zenodo.20457565) her zaman en güncel sürüme yönlendirir. Kullandığınız sürümü belirtmek için v1.1.0'ın sürüme özel DOI'sini kullanın: [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 
 ---
 

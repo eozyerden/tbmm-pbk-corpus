@@ -9,7 +9,7 @@ Budget hearings before the 2009 budget year (i.e., sessions held in late 2007 an
 No PBK budget hearings took place in calendar year 2015. The 2015 budget year itself **is** included in the corpus (the 2015 budget was deliberated in late 2014). The June 2015 elections produced a hung parliament; snap elections were called for November 2015. The new government was formed on 24 November 2015, after the normal October-November budget window had passed. The 2016 budget was consequently deliberated in January-February 2016. `butce_yili = 2016` is correctly assigned to those sessions; there is no data gap — no hearings were held.
 
 ### 1.3 Incomplete 2009 budget data (4 sessions)
-The 2009 budget year (sessions from late 2008) has only 4 transcripts in the TBMM OWA system, while all other years have 10-23. The reason is unknown (indexing issue or actual missing sessions). Treat 2009 with caution in count-based analyses.
+The 2009 budget year (sessions from late 2008) has only 4 transcripts in the TBMM OWA system, while all other years have 13-21 (the number of source PDFs per budget year, counted from `data/metadata/sbb_metadata.csv` and `data/metadata/owa_metadata.csv`; the count matches the distinct source files in the published v1.1.0 data). The reason is unknown (indexing issue or actual missing sessions). Treat 2009 with caution in count-based analyses.
 
 ### 1.4 No Plenary (Genel Kurul) proceedings
 This corpus covers only the **committee stage** (Plan ve Bütçe Komisyonu). Plenary budget debates held in December each year are not included. For plenary proceedings, see Demirtaş (2026).
@@ -27,10 +27,15 @@ After manual corrections, 97.5% of MP-role rows have a matched TBMM registration
 - **Institutional representatives** (Sayıştay, RTÜK, Rekabet Kurumu, etc.) that the parser incorrectly classified as MPs. These appear with `rol = "milletvekili"` but are not elected members.
 - A small number of genuine MPs whose names could not be normalized to match the TBMM roster.
 
-Unmatched rows have `sicil = NA` and `parti = NA`. They are retained in the corpus.
+Unmatched rows have `mv_sicil = NA` and `mv_parti = NA`. They are retained in the corpus.
+
+**v1.1.0.** Measured from the published data: 2,585 of 131,755 MP-role turns
+(1.96%) have no `mv_sicil`, spread over 209 distinct raw speaker strings.
+The v1.0.1 description above no longer applies as stated, because the
+institutional representatives were reclassified (§3.1).
 
 ### 2.2 Ferit Mevlüt Aslanoğlu — partial coverage
-Aslanoğlu served as an MP in the 23rd term (CHP, Malatya) and the 24th term (CHP, Istanbul; died in office 2014). TBMM's own database omits his 24th-term record. His 24th-term appearances in the corpus (5,374 rows, budget years 2012-2015) are matched via a manually added record sourced from Wikipedia and news archives.
+Aslanoğlu served as an MP in the 23rd term (CHP, Malatya) and the 24th term (CHP, Istanbul; died in office 2014). TBMM's own database omits his 24th-term record. His 24th-term appearances in the corpus (5,397 rows, budget years 2012-2014; measured from the published v1.1.0 data) are matched via a manually added record sourced from Wikipedia and news archives.
 
 ### 2.3 2012-2014 previously lower match rates
 Before the manual corrections described above, match rates for budget years 2012 (70%), 2013 (73%), and 2014 (77%) were significantly below the corpus average. These are now resolved (96-99% range) through manual MP additions and the Adil Kurt → Adil Zozani alias.
@@ -60,6 +65,33 @@ that roughly 260 individuals spoke as MPs in more than one term, which
 matches expected re-election patterns. Per-term counts range from 93
 to 339.
 
+### 2.5 Small linkage residuals in v1.1.0
+
+Measured from the published v1.1.0 data:
+
+- **17 appointed-minister turns labelled as MP speech.** A misspelled
+  title in the speaker header (`BAKAN` for `BAKANI`, or words run
+  together) keeps the minister pattern from matching,
+  so the turn falls through to `rol = "milletvekili"` and stays
+  unmatched (`mv_sicil = NA`, no `bakan_id`). All are in budget year
+  2024: `SAĞLIK BAKAN FAHRETTİN KOCA` (15), `İÇİŞLERİ BAKAN ALİ YERLİKAYA`
+  (1) and `ULAŞTIRMAVEALTYAPI BAKANIABDULKADİR URALOĞLU` (1).
+- **4 Ferit Mevlüt Aslanoğlu turns unmatched.** Spelling or spacing
+  errors in the speaker header keep them from matching the manual
+  24th-term record: `FERİT MEVLTÜ ASLANOĞLU` (2),
+  `FERİT MEVLÜT ASLANOĞUL` (1), and one with extra spaces between the
+  given names. The other 5,397 term-24 turns are linked (§2.2).
+- **2 institutional-representative turns labelled as MP speech.**
+  `YÜKSEK ÖĞRENİM KREDİ VE YURTLAR KURUMU MÜDÜRÜ HASAN ALBAYRAK`
+  (2 turns, budget year 2011). The title *Kurumu Müdürü* is not among
+  the bureaucrat patterns (only *Genel Müdür* is), so the turns fall
+  through to `rol = "milletvekili"` and stay unmatched. The same
+  speaker's four turns recorded as `... KURUMU GENEL MÜDÜRÜ ...` are
+  labelled `burokrat`. The validation suite's check for institutional
+  representatives labelled as MPs does not catch these two.
+
+These turns are among the 2,585 unmatched MP-role turns reported in §2.1.
+
 ---
 
 ## 3. Parser Limitations
@@ -83,11 +115,14 @@ Ombudsman, TMSF, TÜİK and TÜBİTAK, along with the titles
 *Başkan Yardımcısı*, *Daire Başkanı*, *Denetçi*, *Strateji Geliştirme*
 and *Teftiş Kurulu*.
 
-The boundary assertions were removed and the institution list extended
-to 23 terms. 806 turns moved from `milletvekili` to `burokrat`. The
-bureaucrat count rose from 521 to 1,327, or from 1.77 to 4.51 turns
-per session day. MP linkage rose from 97.4% to 98.0%, since the
-reclassified turns were never matchable against the MP roster.
+The boundary assertions were removed and the pattern list extended
+from 10 to 24 terms by adding nine institutions and five official
+titles. 806 turns moved from `milletvekili` to `burokrat`. The
+bureaucrat count, measured from the published data, is 406 turns in
+v1.0.1 and 1,327 in v1.1.0; the totals differ by more than the 806
+reclassified turns, and this document does not break down the remainder.
+MP linkage rose from 97.5% (measured 97.48%) to 98.0% (measured 98.04%),
+since the reclassified turns were never matchable against the MP roster.
 
 **Remaining.** Eleven turns by the committee's own deputy chairs
 (recorded as `PLAN VE BÜTÇE KOMİSYONU BAŞKAN VEKİLİ ...`) are still
@@ -102,23 +137,28 @@ The `bakanlık` (ministry) field, where present, is derived from detecting minis
 ### 3.3 Speaker continuity not tracked
 When the same speaker makes multiple interventions in a session, each is recorded as a separate row. The corpus does not link these into a single "floor time" unit, nor does it record the interlocutor. Cross-turn context must be reconstructed by the analyst using `tarih` + `oturum_sira`.
 
-A related low-level case: where a speaker header is followed by a dash
-with no intervening space (`ADI SOYADI (İl) -Metin`), the regex does not
-match and the transition is missed. This occurs at background levels
-throughout the corpus, most visibly in budget year 2025 (approximately
-36 turns). Unlike the 2016 failure, it does not distort role
-distribution or turn length at the population level.
+A related case is embedded chair headers. 104 turns (0.045%; 88 in
+budget years 2009-2015) contain an embedded chair header. Of 106 such
+transitions, 93 have no space after the dash; 10 have a header line
+that starts without leading indentation; 2 have the header on the same
+line as the preceding speaker's text; and 1 has nothing after the dash
+on the header line. All four fall outside the speaker regex
+(`R/parse_helpers.R`), so the transition is missed and the chair's
+words are attached to the preceding turn. The same conditions also
+affect other speakers' headers (for example `ADI SOYADI (İl) –Metin`);
+those cases are not counted here. Unlike the 2016 failure, this does
+not distort role distribution or turn length at the population level.
 
 ---
 
 ## 4. Encoding Issues (Historical — 2016 PDFs)
 
-Thirteen SBB PDFs from 2016 were generated with a defective encoding that corrupted three Turkish characters:
+Thirteen SBB PDFs from 2016 are affected. The text layer of these PDFs maps three Turkish characters to the wrong code points (a font encoding defect). How the PDFs render on screen was not checked. In the extracted text:
 - `Ģ` should be `ş` (92,465 instances)
 - `ġ` should be `Ş` (10,812 instances)
 - `Ġ` should be `İ` (15,319 instances)
 
-These have been corrected in the published corpus (total: 118,596 characters). The pre-correction version is preserved as `konusmalar_metadata_v1_pre_encoding.parquet` in the Zenodo archive for reproducibility.
+These have been corrected in the published corpus (total: 118,596 characters). A file named `konusmalar_metadata_v1_pre_encoding.parquet` is not distributed: it is not among the files of the Zenodo v1.0.1 record (10.5281/zenodo.20457566) or of the v1.1.0 record, checked against the record file lists and the contents of the data archives. The corpus as published in v1.0.1, which already had the text-level repair, is available from the v1.0.1 record.
 
 ### 4.1 Speaker segmentation failure in 2016 SBB transcripts
 
@@ -128,11 +168,11 @@ defect as it existed in v1.0.1.
 **Severity: high. Speaker-level data for budget year 2016 should not be
 used.**
 
-The character corruption documented in §4 (İ→Ġ, Ş→Ģ/ġ) was repaired at
+The character corruption documented in §4 (İ→Ġ, Ş→ġ, ş→Ģ) was repaired at
 the text level, but the repair was applied *after* speaker segmentation.
 The speaker-line regex in `R/parse_helpers.R` matches only standard
 Turkish uppercase characters; the corrupted glyphs Ġ, Ģ and ġ fall
-outside that class. Speaker headers such as `BAĠKAN –` and
+outside that class. Speaker headers such as `BAġKAN –` and
 `MALĠYE BAKANI ... –` were therefore not recognised as speaker
 transitions, and those lines were absorbed into the preceding speaker's
 turn.
@@ -144,13 +184,13 @@ turn.
 | Recorded turns for budget year 2016 | 6,745 |
 | Turns containing an unrecognised speaker header | 2,691 (39.9%) |
 | Total unrecognised speaker transitions | 4,529 |
-| Estimated true turn count | ~11,274 |
+| Turn count after the v1.1.0 re-parse (fixed in v1.1.0) | 15,260 (measured) |
 | Share of 2016 word volume in affected turns | 71.7% |
 | Affected source PDFs | 13 of 13 |
 
 All thirteen affected PDFs are compromised throughout, not in isolated
-passages. The recorded turn count for 2016 is roughly one third short of
-what it should be, and the majority of the year's text sits inside
+passages. The recorded turn count for 2016 (6,745) was less than half of the
+15,260 turns found after the v1.1.0 re-parse, and the majority of the year's text sits inside
 merged turns.
 
 **Observable consequences:**
@@ -174,7 +214,7 @@ the boundaries between turns. Analyses operating on the year's aggregate
 text without reference to speakers are unaffected.
 
 A corrected re-parse, applying the encoding repair before segmentation,
-is planned. The corruption is confined to 2016: the glyphs Ġ, Ģ and ġ
+was carried out in v1.1.0 (see Resolution below). The corruption is confined to 2016: the glyphs Ġ, Ģ and ġ
 appear in no other budget year.
 
 **Resolution (v1.1.0).** The encoding repair was moved into the parse
@@ -269,6 +309,9 @@ and flags years falling outside expected bands. It also runs residue
 checks for corrupted characters, footer text, embedded speaker headers
 and misclassified institutional representatives, and compares against
 a stored baseline.
+
+For how to run it, see [`replication_guide.md`](replication_guide.md) and
+[`quality_note_v1.1.0.md`](quality_note_v1.1.0.md).
 
 The suite was validated against the pre-correction data: it raises two
 band flags and three residue alerts for budget year 2016, and lists

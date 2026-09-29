@@ -14,12 +14,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
   Two footer templates were not matched by the cleaning rules.
   5,268 turns affected.
 - Role classification for institutional representatives. Word-boundary
-  assertions failed against Turkish suffixes, and fourteen institutions
-  were missing from the pattern list. 806 turns reclassified from
-  `milletvekili` to `burokrat`.
+  assertions failed against Turkish suffixes, and nine institutions and
+  five official titles were missing from the pattern list, which now has
+  24 terms. 806 turns reclassified from `milletvekili` to `burokrat`.
 - Committee chair for budget year 2015 was unidentified; the lookup
-  table gap is now filled. Chair linkage for that year rose from 0.5%
-  to 100%.
+  table gap is now filled. In v1.0.1 no chair-role row carried an
+  identifier; in v1.1.0, 77,292 of 77,293 do.
 - Unique MP count was reported as 1,184 in documentation up to
   v1.0.1. That was a count of raw speaker strings, not people; the
   correct figure is 858. See known_issues.md.
@@ -41,6 +41,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Legacy TBMM transcript endpoint behaviour (known_issues.md)
 - Unspaced speaker-dash transitions as a background parser limitation
 - DOI (this version): 10.5281/zenodo.22150634
+- Quality note: `docs/quality_note_v1.1.0.md`, an account of the five
+  defects and the validation suite.
+- Data dictionary and methodology figures aligned with the published
+  v1.1.0 data (linkage by role, role counts, minister and chair counts).
+- No column was renamed in v1.1.0. The main-corpus columns are `mv_sicil`
+  and `mv_parti`, as in the published v1.0.1 data; the v1.0.1 data
+  dictionary had listed them as `sicil` and `parti`.
 
 ## [1.0.1] - 2026-05-30
 

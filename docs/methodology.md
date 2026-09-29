@@ -122,15 +122,15 @@ Turkish uppercase conversion is handled by a custom `turkish_upper()` function t
 
 ### 5.4 Role assignment
 
-Role priority (applied in order to avoid ambiguity):
-1. **baskan** — tag contains "BAŞKAN" or "OTURUM BAŞKANI"
-2. **bakan** — tag contains a ministry title ("X BAKANI", "BAKAN X")
-3. **burokrat** — tag contains "MÜSTEŞAR", "GENEL MÜDÜR", "BAŞKAN YARDIMCISI", "BAŞKANI" (without committee-chair context)
-4. **milletvekili** — tag contains a province name in parentheses and none of the above
+Role priority (applied in order to avoid ambiguity; `classify_role()` in `R/parse_helpers.R`):
+1. **burokrat** — the speaker string contains any of 24 terms, for example "MÜSTEŞAR", "GENEL MÜDÜR", "SAYIŞTAY BAŞKANI", "RTÜK", "BDDK", "SPK", "REKABET KURUMU", "BAŞKAN YARDIMCISI", "DAİRE BAŞKANI". The terms are matched without word-boundary assertions, which failed against Turkish possessive suffixes in v1.0.1 (see [quality_note_v1.1.0.md](quality_note_v1.1.0.md))
+2. **baskan** — the speaker string matches a committee-chair or session-chair pattern, most of them anchored to the start of the string ("BAŞKAN", "KOMİSYON BAŞKANI", "OTURUM BAŞKANI", "BAŞKAN VEKİLİ", "TBMM BAŞKANI", "PLAN VE BÜTÇE KOMİSYONU BAŞKANI")
+3. **bakan** — the speaker string contains a ministry title ("X BAKANI", "BAŞBAKAN", "BAŞBAKAN YARDIMCISI", "CUMHURBAŞKANI YARDIMCISI")
+4. **milletvekili** — none of the above
 
 ### 5.5 Known parsing limitations
 
-- **Institutional representatives** (Sayıştay, RTÜK, Rekabet Kurumu, etc.) occasionally appear with province-like parenthetical tags and are misclassified as `milletvekili`. Approximately 3,271 such rows remain in the corpus (2.5% of MP-role rows); they have `sicil = NA`. Correcting this would require named-entity recognition or a dedicated institutional representative lookup.
+- **Institutional representatives** (Sayıştay, RTÜK, Rekabet Kurumu, etc.) occasionally appear with province-like parenthetical tags and are misclassified as `milletvekili`. In v1.1.0 the pattern list was extended (see the quality note), which moved 806 turns to `burokrat`. Eleven turns by the committee's own deputy chairs are still labelled `milletvekili`.
 - **Province name whitelist** controls false positives from Roman numerals and other parenthetical content; 138 such false positives were identified and corrected during development.
 
 ---
@@ -165,7 +165,7 @@ Final match rate: **98.0%** (MP role; chair 100%, minister 99.3%).
 
 PBK committee chairs are matched using a hand-curated lookup table stored in `R/pbk_baskan_yil.R`, mapping budget year to the canonical chair name. The matching script (`13_baskan_eslestir.R`) applies this lookup to all `baskan`-role rows.
 
-Match rate: **100%** (all 68,561 chair-role speeches matched).
+Match rate: **100%** (77,292 of 77,293 chair-role turns carry an `mv_sicil`; the exception is one 2023 turn recorded as `BAŞKAN VEKİLİ` without a name).
 
 ### 6.3 Minister matching (Tier 3)
 
@@ -175,11 +175,11 @@ Ministers are matched in two sub-tiers:
 
 **Appointed technocrats** (Tier 3b): Non-MP ministers (technocrats appointed under Article 109 of the Constitution) are matched via a hand-curated CSV (`data/manuel/bakan_manuel.csv`, 18 individuals) with tenure dates. Examples include Mehmet Şimşek (Finance Minister 2009-2015, 2023+) and Naci Ağbal.
 
-Match rate: **99.8%** (44 of 19,213 minister-role speeches unmatched; three edge cases: a minister identified only by first name, a bureaucrat misclassified as a minister, and Nimet Çubukçu who was actually an MP at the time).
+Match rate: **99.3%** (146 of 21,548 minister-role turns have `bakan_eslesme_tier = eslesemedi`: 102 for Mehmet Cahit Turhan, 41 for Nimet Çubukçu, who was actually an MP at the time, 2 for a minister identified only by the first name "Fahrettin", and 1 for "Na Bi Avcı"). These counts are measured from the published v1.1.0 data.
 
 ### 6.4 Bureaucrat matching (Tier 4)
 
-Senior bureaucrats (`burokrat` role) are not matched to a roster. Their appearances are retained in the corpus with speaker name but no sicil or party. This affects 383 speeches (0.2% of corpus).
+Senior bureaucrats (`burokrat` role) are not matched to a roster. Their appearances are retained in the corpus with speaker name but no sicil or party. This affects 1,327 turns (0.6% of the corpus).
 
 ---
 
@@ -189,13 +189,17 @@ All manual interventions are documented in version-controlled files under `data/
 
 | Intervention | Rows affected | File |
 |---|---|---|
-| Ferit Mevlüt Aslanoğlu 24th-term record | 5,374 | `mv_metadata_manuel.csv` |
-| Kazım Kurt 24th-term record | 461 | `mv_metadata_manuel.csv` |
-| Adil Kurt → Adil Zozani alias | 547 | inline in `12_mv_eslestirme.R` |
-| Nimet Çubukçu removed from minister list | 0 (prevented misclassification) | `bakan_manuel.csv` |
-| Berat Albayrak typo ("BERAK ALBAYRAK") | 103 | `bakan_typo_map.csv` |
-| 18 appointed technocrat ministers | 2,745 | `bakan_manuel.csv` |
+| Ferit Mevlüt Aslanoğlu 24th-term record | 5,397 | `mv_metadata_manuel.csv` |
+| Kazım Kurt 24th-term record | 462 | `mv_metadata_manuel.csv` |
+| Adil Kurt → Adil Zozani alias | 549 | inline in `12_mv_eslestirme.R` |
+| Nimet Çubukçu removed from minister list | 0 carry an appointed-minister identifier (her 41 minister-role turns are unmatched, see §6.3) | `bakan_manuel.csv` |
+| Berat Albayrak typo ("BERAK ALBAYRAK") | 1 | generated by `10_bakan_typo_temizlik.R` (`bakan_typo_map.csv`, not in the repository) |
+| 18 appointed technocrat ministers | 2,858 | `bakan_manuel.csv` |
 | Province name normalization (3 city names) | small | inline in `12_mv_eslestirme.R` |
+
+Rows affected: for added roster records, rows linked to that identifier in the corrected term; for aliases and spelling corrections, rows carrying the corrected spelling. Figures in earlier versions of this table could not be reproduced and have been replaced.
+
+Counts are measured from the published v1.1.0 data (231,923 rows). Aslanoğlu: `mv_sicil = 6228` in term 24 (budget years 2012-2014); the TBMM roster holds only the 23rd-term record. Kurt: `mv_sicil = 6713` in term 24, a sicil absent from the TBMM roster (461 of the 462 carry the exact spelling "KAZIM KURT"; one is a misspelling matched by the fuzzy tier). Zozani: raw speaker string `ADİL KURT`, all linked to `mv_sicil = 6969`. Albayrak: raw speaker string containing `BERAK ALBAYRAK`. Technocrats: `bakan_eslesme_tier = "atanmış"`. The v1.0.1 data gives the same counts for the Aslanoğlu, Kurt, Zozani and Albayrak rows.
 
 ---
 
@@ -203,7 +207,7 @@ All manual interventions are documented in version-controlled files under `data/
 
 ### 8.1 Encoding fix (2016 PDFs)
 
-Thirteen SBB PDFs from 2016 were generated with a defective glyph-encoding table that corrupted three Turkish characters. The corruption was systematic and consistent:
+Thirteen SBB PDFs from 2016 are affected. The text layer of these PDFs maps three Turkish characters to the wrong code points (a font encoding defect). How the PDFs render on screen was not checked. The corruption was systematic and consistent:
 
 | Corrupted | Correct | Count |
 |---|---|---|
@@ -211,7 +215,7 @@ Thirteen SBB PDFs from 2016 were generated with a defective glyph-encoding table
 | `ġ` | `Ş` | 10,812 |
 | `Ġ` | `İ` | 15,319 |
 
-The encoding diagnostic (`16_encoding_tani.R`) identified the pattern by comparing character frequency distributions across years. The fix (`17_encoding_duzelt.R`) applies character-level substitution to the affected text. Total characters corrected: 118,596.
+The encoding diagnostic (`16_encoding_tani.R`) identified the pattern by comparing character frequency distributions across years. The fix applies character-level substitution to the affected text (originally `17_encoding_duzelt.R`). Total characters corrected: 118,596. Since v1.1.0 the substitution (`fix_enc()` in `R/parse_helpers.R`) runs inside the parser, before speaker segmentation; in v1.0.1 it ran afterwards, which caused the 2016 segmentation failure documented in [quality_note_v1.1.0.md](quality_note_v1.1.0.md).
 
 ### 8.2 Coverage verification
 
@@ -223,15 +227,19 @@ Three independent coverage tests were conducted (script: `18_kapsama_analizi.R`)
 
 **Test 3 — Volume sanity check:** Speeches per year were checked against expectations derived from the number of sessions and average speeches per session. No year showed anomalous volume.
 
-### 8.3 Long-speech inspection
+### 8.3 Long-speech inspection and validation
 
-Speeches exceeding 5,000 words (an upper-tail outlier) were manually inspected. The longest speeches were committee chairs reading lengthy budget summaries — a real feature of the data, not a parser artifact. No concatenation errors were found.
+Through v1.0.1 this section reported that speeches exceeding 5,000 words had been inspected manually, that the longest were committee chairs reading budget summaries, and that no concatenation errors were found. That was wrong. The published v1.0.1 data contained a speaker-segmentation failure in budget year 2016: speaker headers corrupted by the encoding defect described in §8.1 were not recognised, and turns from different speakers were merged. Six MP turns of more than 5,000 words in v1.0.1 were all in 2016. The failure is corrected in v1.1.0; see [quality_note_v1.1.0.md](quality_note_v1.1.0.md).
+
+From v1.1.0, concatenation errors are checked by `scripts/99_validate.R` rather than by manual inspection of long speeches. The suite reports per-year turn counts, turns per source PDF and turn-length distributions including the 99th percentile and maximum. It flags years whose turn density, mean turn length, upper tail, chair share or MP linkage fall outside expected bands, lists source files whose turn count or mean length is an outlier, and counts residue: corrupted characters, footer text, speaker headers embedded in speech text, and institutional representatives labelled as MPs. Run against the v1.0.1 data it flags budget year 2016 (chair share and mean turn length) and lists seven 2016 source files as outliers. Run against the published v1.1.0 data it raises no flag for 2016 and shows no difference from the stored baseline `baseline_v1.1.0.csv` in any year.
+
+104 turns (0.045%; 88 in budget years 2009-2015) contain an embedded chair header. Of 106 such transitions, 93 have no space after the dash; 10 have a header line that starts without leading indentation; 2 have the header on the same line as the preceding speaker's text; and 1 has nothing after the dash on the header line. All four fall outside the speaker regex (`R/parse_helpers.R`), so the transition is missed and the chair's words are attached to the preceding turn. Of the 22 turns longer than 5,000 words in v1.1.0, 21 are minister turns and one is a chair turn; none is attributed to an MP.
 
 ---
 
 ## 9. Limitations
 
-1. **~2.5% unmatched MP speeches.** After all matching tiers, 3,271 rows with `rol = "milletvekili"` remain unmatched (`sicil = NA`). These are primarily institutional representatives misclassified by the parser. They are retained in the corpus.
+1. **~2.0% unmatched MP speeches.** After all matching tiers, 2,585 of 131,755 rows with `rol = "milletvekili"` (1.96%) remain unmatched (`mv_sicil = NA`). They are retained in the corpus. In v1.0.1 the unmatched rows were described as primarily institutional representatives; that was largely corrected in v1.1.0 (see the quality note).
 
 2. **Approximate ministry-speech linkage.** The `bakanlık` field (where present) is derived from detecting ministry names anywhere in the PDF, not from structured agenda items. A ministry name may appear as a cross-reference rather than indicating the day's primary topic. Precise linkage is left for future work.
 

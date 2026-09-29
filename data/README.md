@@ -7,8 +7,7 @@ This directory contains:
 Manual additions and corrections necessary for replication. These files are version-controlled because they represent research decisions, not raw data:
 
 - `mv_metadata_manuel.csv` — Members of parliament not present in TBMM's official roster (e.g., F.M. Aslanoğlu's 24th term, K. Kurt's 24th term)
-- `bakan_manuel.csv` — Non-MP ministers (technocrats appointed by the Council of Ministers)
-- `atanmis_bakanlar_manuel.csv` — Same as above with different naming (legacy)
+- `bakan_manuel.csv` — Non-MP ministers (technocrats appointed by the Council of Ministers), 18 rows
 
 ## `metadata/` — Scraping metadata (CSVs, tracked in git)
 
@@ -28,4 +27,4 @@ These directories will be populated when you run the pipeline or download data f
 - `processed/konusmalar_metadata.parquet` — Main corpus (with metadata)
 - `processed/mv_metadata.parquet` — TBMM MP roster
 
-To get the full data, see [Zenodo archive: DOI placeholder].
+To get the full data, see the [Zenodo archive](https://doi.org/10.5281/zenodo.20457565) (concept DOI 10.5281/zenodo.20457565, which always resolves to the latest version).
