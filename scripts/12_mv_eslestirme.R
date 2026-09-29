@@ -62,12 +62,15 @@ cat(sprintf("  Corpus  : %d satir\n", nrow(corpus)))
 cat(sprintf("  mv_meta : %d satir\n", nrow(mv_meta)))
 
 # Manuel ekleme: TBMM listesinde olmayan ama corpus'ta konusan mv'ler
-manuel_path <- here("data/processed/mv_metadata_manuel.csv")
-if (file.exists(manuel_path)) {
-  manuel <- read_csv(manuel_path, show_col_types = FALSE)
-  cat(sprintf("  Manuel mv ekleme: %d kayit\n", nrow(manuel)))
-  mv_meta <- bind_rows(mv_meta, manuel)
+manuel_path <- here("data/manuel/mv_metadata_manuel.csv")
+if (!file.exists(manuel_path)) {
+  stop("Manuel mv dosyasi bulunamadi: ", manuel_path,
+       "\n  Bu dosya olmadan Aslanoglu ve Kurt (24. donem) eslesmez; ",
+       "depodaki data/manuel/ klasorunu kontrol edin.", call. = FALSE)
 }
+manuel <- read_csv(manuel_path, show_col_types = FALSE)
+cat(sprintf("  Manuel mv ekleme: %d kayit\n", nrow(manuel)))
+mv_meta <- bind_rows(mv_meta, manuel)
 
 # ── Dönem haritası + normalizasyon ────────────────────────────────────────────
 corpus_norm <- corpus |>

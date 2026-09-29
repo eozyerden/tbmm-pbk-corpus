@@ -21,8 +21,9 @@ BAKAN_COLS <- c("bakan_id", "bakanlik_adi", "bakanlik_baslangic", "bakanlik_biti
 km_raw <- read_parquet(here("data/processed/konusmalar_metadata.parquet"))
 
 # Onceki calistirmadan kalan duplike satirlari temizle (many-to-many hatasindan olabilir)
-if (nrow(km_raw) > 210744) {
-  cat("! Onceki calistirmadan", nrow(km_raw) - 210744, "fazla satir bulundu — temizleniyor...\n")
+n_duplike <- sum(duplicated(km_raw$konusma_id))
+if (n_duplike > 0) {
+  cat("! Onceki calistirmadan", n_duplike, "duplike satir bulundu — temizleniyor...\n")
   km_raw <- km_raw |>
     group_by(konusma_id) |>
     slice_head(n = 1) |>
@@ -32,7 +33,7 @@ km <- km_raw |> select(-any_of(BAKAN_COLS))
 
 bakan_unvan  <- read_csv(here("data/processed/bakan_unvan_isim.csv"),  show_col_types = FALSE)
 typo_map     <- read_csv(here("data/processed/bakan_typo_map.csv"),    show_col_types = FALSE)
-bakan_manuel <- read_csv(here("data/processed/bakan_manuel.csv"),       show_col_types = FALSE)
+bakan_manuel <- read_csv(here("data/manuel/bakan_manuel.csv"),          show_col_types = FALSE)
 mv_meta      <- read_parquet(here("data/processed/mv_metadata.parquet"))
 
 cat("Konusmalar:", nrow(km),
