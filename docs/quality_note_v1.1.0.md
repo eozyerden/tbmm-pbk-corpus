@@ -1,341 +1,164 @@
-<!-- Prepared from repository history; awaiting author review. -->
+# Quality Note: v1.1.0
 
-# Quality note: v1.1.0
+**Context:** The TBMM Plan and Budget Committee Discourse Corpus was published as v1.0.1 on 30 May 2026 (concept DOI 10.5281/zenodo.20457565). During a research study using the corpus, five defects were found in the published version, two of them serious. All five have been corrected and republished as v1.1.0 on 28 August 2026 (commit `f89b3e3`, tagged `v1.1.0`). This note describes what they were, how they were found, what was fixed, and what remains.
 
-Version 1.1.0 corrects five defects present in v1.0.1. Users of v1.0.1 should
-migrate, particularly for any speaker-level analysis. The corpus total rises
-from 223,408 to 231,923 turns. The fixes were made in commit `f89b3e3`, which
-is the commit tagged `v1.1.0`. This note describes each defect, how far it
-reached, and what changed. For the release summary see
-[CHANGELOG.md](../CHANGELOG.md); for the standing list of limitations see
-[known_issues.md](known_issues.md).
+None of the five was introduced by the corrections. All were present in the published version, and three had been there since the corpus was first built.
 
-| # | Defect | Budget years | Headline measure |
-|---|---|---|---|
-| 1 | Speaker segmentation failure | 2016 | 6,745 turns recorded; 15,260 after the fix |
-| 2 | Page-footer text in speech records | 2013-2016 | 5,268 turns affected |
-| 3 | Role misclassification of institutional representatives | not broken down by year | 806 turns moved from MP to bureaucrat |
-| 4 | Committee chair unidentified | 2015 | chair linkage 0.5% to 100% |
-| 5 | Unique MP count misreported | corpus-wide figure | 1,184 reported; correct figure 858 |
-
-## How the defects were found
-
-The defects corrected in v1.1.0 were not found by systematic quality control.
-They surfaced while investigating an unrelated measurement question. The
-validation suite described at the end of this note was added so that the same
-class of defect is caught by design rather than by chance.
+For the release summary see [CHANGELOG.md](../CHANGELOG.md); for the standing list of limitations see [known_issues.md](known_issues.md).
 
 ---
 
-## 1. Speaker segmentation failure, budget year 2016
+## 1. What was found
 
-### What was wrong
+### 1.1 Speaker segmentation failure, budget year 2016
 
-Speaker headers in the 2016 transcripts were not recognised as speaker
-transitions, so turns were merged across speakers. Headers such as `BAĠKAN –`
-and `MALĠYE BAKANI ... –` were absorbed into the preceding speaker's turn.
+The most serious defect. The raw text extracted from thirteen source PDFs of the 2016 hearings contains a character corruption: `Ġ` in place of `İ`, `ġ` in place of `Ş`, and `Ģ` in place of `ş`. The corrupted characters are present in the text extraction output (Poppler, via `pdftools::pdf_text()`); whether the PDFs themselves display correctly on screen was not checked. The corruption was known and documented: a repair pass replaced the corrupted characters and was recorded in the published `known_issues.md`.
 
-### Scope
+What was not known is that the repair ran *after* speaker segmentation. The regex identifying speaker lines matches only standard Turkish uppercase characters, so headers reading `BAġKAN –` or `MALĠYE BAKANI ... –` were not recognised as speaker transitions. Those lines were absorbed into the preceding speaker's turn.
 
-- Budget year 2016; all 13 of 13 affected source PDFs (SBB).
-- Recorded turns for 2016 in v1.0.1: 6,745. Turns containing an unrecognised
-  speaker header: 2,691 (39.9%). Total unrecognised speaker transitions: 4,529.
-- Share of the year's word volume in affected turns: 71.7%.
-- Role distribution was distorted: MPs 86.2% of 2016 turns against a corpus
-  range of roughly 50-58%; the chair 8.6% against a corpus range of 25-48%.
-- Mean turn length was 173 words, the highest of any year; the corpus median
-  is 8-9 words.
-- One record attributed to a single MP was found to contain the chair's
-  intervention and a minister's full budget presentation.
-- Measured in the published v1.1.0 data: 15,260 turns for 2016, chair share
-  31.2%, MP share 54.7%, mean turn length 74.0 words (median 9).
+The consequences were severe and measurable:
 
-### Cause
+| Measure | Published v1.0.1 | After correction |
+|---|---|---|
+| Recorded turns, budget year 2016 | 6,745 | 15,260 |
+| Chair share of turns | 8.6% | 31.2% |
+| Mean turn length (words) | 172.9 | 74.0 |
 
-The character corruption documented in known_issues.md §4 had been repaired at
-the text level, but the repair was applied after speaker segmentation. The
-speaker-line regex in `R/parse_helpers.R` matches only standard Turkish
-uppercase characters, so the corrupted glyphs fell outside it.
+The corpus-wide chair share runs 25–48%; 2016 sat at 8.6%. One record attributed to a single MP was found on inspection to contain the chair's intervention and a minister's entire budget presentation. In the worst affected file, the correction raised the turn count by 259%.
 
-The corruption itself is a faulty font/encoding mapping that is present in the
-thirteen SBB PDFs from 2016 and becomes visible when the text is extracted. It
-replaced three Turkish characters: `Ģ` stands for `ş` (92,465 instances), `ġ`
-for `Ş` (10,812) and `Ġ` for `İ` (15,319), 118,596 characters in total. It is
-confined to 2016: those glyphs appear in no other budget year.
+The published corpus therefore contained, for that year, less than half of the turns it should have, with speaker attribution unusable.
 
-### Fix
+### 1.2 Footer text leaking into speech records, budget years 2013–2016
 
-Commit `f89b3e3`. The encoding repair (`fix_enc()` in `R/parse_helpers.R`) now
-runs on the raw text lines in `scripts/06_parse_speeches.R`, before footer
-cleaning and speaker segmentation. All 34 source files with 2016 in their name
-were re-parsed. The defect had earlier been documented in commits `14e1723` and
-`0c38a8c` (2026-08-26).
+A separate and wider problem. The parser strips page furniture — headers, footers, page numbers — using a set of fixed patterns. Two footer templates escaped it.
 
-### Implications for downstream analysis
+The first is an OWA-era template. TBMM's transcription unit was renamed at some point around 2012, from *Tutanak Müdürlüğü* to *Tutanak Hizmetleri Başkanlığı*. The cleaning rule matched only the older name. From calendar year 2012 onward, the three-line footer block was no longer recognised and its text entered the speech records.
 
-For v1.0.1, known_issues.md advised excluding budget year 2016 from any
-analysis of speaker attributes (role, party, turn length, speaker identity,
-turn counts, who-said-what). The text and its encoding were correct; what was
-unreliable was the assignment of text to speakers and the boundaries between
-turns. Analyses of the year's aggregate text without reference to speakers
-were unaffected. In v1.1.0 the year is re-segmented; users of v1.0.1 should
-migrate for any speaker-level analysis of that year.
+The second is an SBB template used only in the 2016 files: a four-line block beginning with `T BM M` — the acronym broken by spurious inter-letter spaces, a separate PDF extraction artefact — followed by the unit name, the committee name, and a date/page line. One file carried a five-line variant with an added *İncelenmemiş Tutanaktır* ("uncorrected transcript") stamp.
 
----
+Across the corpus this affected 5,268 turns, concentrated in budget years 2013, 2014, 2015 and 2016.
 
-## 2. Footer text in speech records, budget years 2013-2016
+Two quantities here need to be kept apart, because conflating them produces a misleading figure. The turns containing footer text held roughly 15% of the corpus word volume — but most of those words are legitimate speech, not footer noise. The noise itself amounted to approximately 94,700 words, or about 0.54% of the corpus. Within the affected years it ran between 1.8% and 3.1% of those years' volume.
 
-### What was wrong
+This one does not corrupt speaker attribution — those years' role distributions are normal. It adds noise to the text and inflates word counts, which matters for any analysis that uses word counts or length thresholds.
 
-Two page-footer templates escaped the text-cleaning rules, and their content
-entered the speech records.
+### 1.3 Metadata layer only partially executed
 
-### Scope
+Discovered while re-running the pipeline after the fixes. The metadata stage comprises several scripts. Two of them — chair matching and minister matching — had not been run against the published dataset.
 
-- 5,268 turns across budget years 2013, 2014, 2015 and 2016.
-- Speaker attribution was not affected. Only the text of those turns carried
-  extra content, and word counts were correspondingly inflated.
-- After the fix, word counts fell by 1.77-1.83% in budget years 2013-2015 and
-  by 3.11% in 2016.
-- Three instances of the phrase remain in the corpus, all verified as
-  legitimate speech about the transcription service.
+The published v1.0.1 therefore carried identity links for MPs only. No chair-role row carried an identifier (0 of 73,107), and ministers had no linked identifier. The chair lookup table (`R/pbk_baskan_yil.R`) also had no entry for budget year 2015; that gap has been filled. Running the two scripts added seven columns (`bakan_id`, `bakanlik_adi`, `bakanlik_baslangic`, `bakanlik_bitis`, `mv_sicil_bakan`, `mv_parti_bakan`, `bakan_eslesme_tier`) and populated `mv_sicil` for chair-role rows: in v1.1.0, 77,292 of 77,293 chair-role rows carry an identifier (the exception is a 2023 turn recorded as `BAŞKAN VEKİLİ` without a name).
 
-### Cause
+To be clear about what the published "97.5% linkage" figure meant: it was correct, and `known_issues.md` §2.1 already specified that it applied to the MP role. But a user reading the headline figure could reasonably have assumed corpus-wide coverage. Figures are now reported by role (v1.1.0):
 
-- First template (OWA era): TBMM's transcription unit was renamed from
-  *Tutanak Müdürlüğü* to *Tutanak Hizmetleri Başkanlığı* around calendar year
-  2012. The cleaning rule matched only the older name, so the three-line
-  footer block was no longer recognised from that point.
-- Second template (2016 SBB files only): a four-line block beginning with
-  `T BM M`, the acronym broken by spurious inter-letter spacing from PDF
-  extraction, followed by the unit name, the committee name and a date/page
-  line. One file (`20160128_gorusme_sbb_001.pdf`) carries a five-line variant
-  with an added *İncelenmemiş Tutanaktır* stamp.
+| Role | Rows | Linkage |
+|---|---|---|
+| MP | 131,755 | 98.0% |
+| Chair | 77,293 | 100% (77,292 of 77,293) |
+| Minister | 21,548 | 99.3% |
+| Bureaucrat | 1,327 | out of scope |
 
-### Fix
+### 1.4 Role misclassification of institutional representatives
 
-Commit `f89b3e3`, in `clean_pdf_text()` in `R/parse_helpers.R`. The OWA rule
-now accepts both names of the transcription unit; a new rule handles both
-variants of the SBB template.
+Representatives of the Court of Accounts, the broadcasting and competition regulators, and similar bodies were being labelled as MPs. This was documented in v1.0.1 but its cause and scale were not known.
 
-### Implications for downstream analysis
+Two causes were found. The first is a regex defect. The patterns `MÜSTEŞAR\b` and `GENEL MÜDÜR\b` were intended to catch undersecretaries and directors-general. In Turkish these titles take possessive suffixes: `MÜSTEŞARI`, `GENEL MÜDÜRÜ`. The word-boundary assertion is ASCII-based, so in `MÜSTEŞARI` the suffix `I` counts as a word character and no boundary is found — the pattern never matches. `GENEL MÜDÜRÜ` matched only because its suffix begins with `Ü`, which the assertion treats as a non-word character. Two patterns of identical construction behaved differently by accident, and one of them failed silently from the day it was written.
 
-Speaker-level variables were not affected. Text-based measures for these four
-budget years, in particular word counts, differed in v1.0.1 by the percentages
-given under Scope.
+The second cause is plain omission. Nine institutions and five official titles were absent from the pattern list altogether: RTÜK, BDDK, SPK, the Competition Authority, the Public Procurement Authority, the Ombudsman, TMSF, TÜİK and TÜBİTAK, and the titles *Başkan Yardımcısı*, *Daire Başkanı*, *Denetçi*, *Strateji Geliştirme* and *Teftiş Kurulu*. The pattern list now has 24 terms.
+
+806 turns were reclassified. In the re-parsed corpus, bureaucrat turns rose from 521 to 1,327, or from 1.77 to 4.51 per source PDF — a far more plausible figure for hearings in which ministry officials field technical questions. MP linkage rose from 97.4% to 98.0%, since the reclassified turns had never been matchable against the MP roster in the first place.
+
+Eleven turns remain misclassified: the committee's own deputy chairs, recorded as `PLAN VE BÜTÇE KOMİSYONU BAŞKAN VEKİLİ ...`. The chair patterns are anchored to the start of the speaker string. Removing the anchor was tested and rejected, because it would capture the deputy chairs of nine other institutions.
+
+### 1.5 Unique MP count misreported
+
+The README and methodology documents reported 1,184 unique MPs. The figure came from an early exploratory report that counted distinct raw speaker strings, before name normalisation and identifier matching. It was carried into the published documentation as if it counted people.
+
+The correct figure is 858, counting distinct TBMM permanent identifiers among turns classified as MP speech.
+
+The inflation had two sources. Sixty-two individuals appear under more than one spelling; in the worst case a single MP appears under eleven variants, adding ten spurious entries. A further 204 distinct speaker strings could not be matched to the roster at all and were counted as separate people.
+
+The corrected figure is internally consistent. It yields 1,119 term-person pairs across five TBMM terms, implying roughly 260 individuals who spoke as MPs in more than one term — an ordinary re-election pattern. Per-term counts range from 93 to 339.
+
+A related correction: the documentation reported 26 committee chairs. The actual figure is six people who served as chair of the Plan and Budget Committee, plus thirteen Speakers and Deputy Speakers of the Grand National Assembly who presided over sessions occasionally — nineteen individuals in total carrying the `baskan` role. The documentation now states both figures separately.
 
 ---
 
-## 3. Role misclassification of institutional representatives
+## 2. How these were found
 
-### What was wrong
+Worth stating plainly, because it bears on how much confidence to place in the remainder.
 
-Institutional representatives (bureaucrats) were classified as MPs. The parser
-assigns `rol = "milletvekili"` to any speaker with a province tag in
-parentheses, and representatives of institutions occasionally appear with
-province-like tags.
+None of the five was found by systematic quality control. All surfaced while chasing something else.
 
-### Scope
+The sequence: during a research study using the corpus, a per-year distribution of turn lengths was requested while examining a length confound. Budget year 2016 was a visible outlier — 173 words mean against a corpus median of 8–9. Pursuing that produced the segmentation diagnosis. Pursuing the segmentation fix surfaced residual footer text, and pursuing that revealed the wider footer problem. Re-running the pipeline afterward revealed that the metadata stage had been incompletely executed. A reviewer then observed that 521 bureaucrat turns across 294 source PDFs was implausibly low, which produced the role-classification diagnosis. Verifying the published statistics before republishing produced the last one.
 
-- 806 turns moved from `milletvekili` to `burokrat`. The sources do not break
-  this down by budget year.
-- Measured in the published data: 406 `burokrat` turns in v1.0.1 and 1,327 in
-  v1.1.0. The totals differ by more than the 806 reclassified turns, and the
-  sources do not break down the remainder.
-- MP linkage is 98.0% in v1.1.0 (measured 98.04%) against 97.5% in the published
-  v1.0.1 data (measured 97.48%). The reclassified turns were never matchable
-  against the MP roster.
-- Remaining: eleven turns by the committee's own deputy chairs (recorded as
-  `PLAN VE BÜTÇE KOMİSYONU BAŞKAN VEKİLİ ...`) are still labelled
-  `milletvekili` (measured: 11). The chair patterns are anchored to the start
-  of the speaker string and do not match; removing the anchor was tested and
-  rejected because it would capture the deputy chairs of nine other
-  institutions.
+The 2016 defect was, in retrospect, trivially detectable. A single table of role distribution by year would have shown it: chair share at 8.6% against a range of 25–48% is not subtle. That table was never produced, because the verification run after the encoding repair asked "were the characters fixed?" and not "what else did the corruption break before we fixed it?"
 
-### Cause
-
-Two causes were identified.
-
-1. The patterns `MÜSTEŞAR\b` and `GENEL MÜDÜR\b` failed against Turkish
-   possessive suffixes. In `MÜSTEŞARI` the suffix begins with ASCII `I`, which
-   the word-boundary assertion treats as a word character, so no boundary is
-   found. `GENEL MÜDÜRÜ` matched only because its suffix begins with `Ü`,
-   which is not an ASCII word character.
-2. Several institutions and titles were absent from the pattern list: RTÜK,
-   BDDK, SPK, the Competition Authority, the Public Procurement Authority, the
-   Ombudsman, TMSF, TÜİK and TÜBİTAK (nine institutions), and the titles
-   *Başkan Yardımcısı*, *Daire Başkanı*, *Denetçi*, *Strateji Geliştirme* and
-   *Teftiş Kurulu* (five titles). The Zenodo release notes describe these
-   fourteen additions as "fourteen institutions".
-
-### Fix
-
-Commit `f89b3e3`, in `classify_role()` in `R/parse_helpers.R`. The boundary
-assertions were removed and the pattern list extended from 10 to 24 terms (the
-14 additions above).
-
-### Implications for downstream analysis
-
-In v1.0.1 these 806 turns were counted as MP speech. Role comparisons between
-MPs and bureaucrats made with v1.0.1 should be re-run. <!-- review: inferred from documented scope -->
+The corrective conclusion is procedural, not about any individual step. A standing validation suite has been added (§4): per-year role distribution, turn counts, length distribution, embedded-header rate, linkage rate by role, all compared against the previous version. It runs after any pipeline change. This catches the class of defect that was missed, regardless of who or what runs the pipeline.
 
 ---
 
-## 4. Committee chair for budget year 2015
+## 3. What was fixed and how it was verified
 
-### What was wrong
+Four changes to the pipeline:
 
-The committee chair for budget year 2015 was unidentified.
+1. The footer-cleaning rule was extended to accept both names of the transcription unit.
+2. A new rule was added for the SBB 2016 footer block, handling both the four-line and five-line variants. Strict patterns requiring exact consecutive matches were used rather than a flexible window, to avoid deleting legitimate text.
+3. The encoding repair was moved into the parse pipeline, ahead of segmentation, where it belongs.
+4. The role-classification patterns were corrected: boundary assertions removed, pattern list extended from 10 to 24 terms.
 
-### Scope
+Eighty-four files were re-parsed for the first three fixes: all 34 files whose names begin with 2016, and the 50 OWA files from calendar years 2012–2014. The role correction was applied corpus-wide, recomputed from the existing speaker strings without re-parsing, since role assignment depends on nothing else.
 
-- Budget year 2015 (deliberated in late 2014).
-- The release notes give chair linkage for that year as rising from 0.5% to
-  100%. In the published v1.0.1 data no chair-role turn carries an identifier
-  at all (measured: 0 of 73,107), because chair matching had not been run
-  against the published dataset. In v1.1.0 every 2015 chair-role turn is
-  linked (measured: 5,776 of 5,776).
+Verification was specified in advance, with expected values stated before the run, and all criteria held:
 
-### Cause
+| Criterion | Expectation | Result |
+|---|---|---|
+| 2016 turn count | 6,745 → ~15,260 | 15,260 |
+| 2016 chair share | into 25–40% band | 31.2% |
+| 2016 mean turn length | into 60–90 band | 74.0 |
+| 2013/2014/2015 turn count | unchanged | unchanged |
+| 2013/2014/2015 word count | down 1–2% | −1.77 / −1.79 / −1.83% |
+| All other 13 years | no metric changes | max difference 0 |
+| Corpus total | 223,408 → ~231,900 | 231,923 |
+| Bureaucrat turns per source PDF | 1.77 → higher | 4.51 |
+| Institutional representatives still labelled MP | 0 | 0 |
 
-The chair lookup table `R/pbk_baskan_yil.R` had no entry for 2015 (the value
-was `NA`, annotated as not verifiable). The gap is now filled.
+The turn-count/word-count split matters: it confirms the fixes are independent and behaving as intended. Where only footer noise was present, turn boundaries were untouched and only word counts fell. Where segmentation was broken, turn counts rose.
 
-### Fix
+Residual checks: corrupted characters, zero. Footer leakage, three instances remaining, all inspected and all legitimate speech — one MP discussing transcription procedure, two referring to the transcription service in substantive remarks. A legitimate-content test was run explicitly: in one file the phrase appears inside a genuine MP sentence about transcription practice, and the rule correctly left it alone because it did not match the block structure.
 
-Commit `f89b3e3`. The 2015 entry in `R/pbk_baskan_yil.R` is now Recai Berber
-(Manisa), with the source recorded in the code comment as the page header of
-the transcripts (17 of 17 files, 2014-10-23 to 2014-11-25) and the press
-archive.
-
-### Implications for downstream analysis
-
-Chair-level analysis that depends on the chair's identity is now possible for
-budget year 2015, as it is for the other years. <!-- review: inferred from documented scope -->
-
----
-
-## 5. Unique MP count misreported
-
-### What was wrong
-
-Versions up to v1.0.1 reported 1,184 unique MPs. The figure was carried into
-the README and methodology documents as if it were a count of people. The
-correct figure is 858.
-
-### Scope
-
-A documentation figure; the speech records themselves are not described as
-affected in the sources. The corrected figure counts distinct TBMM permanent
-identifiers among turns classified as MP speech (measured in the published
-v1.1.0 data: 858).
-
-### Cause
-
-1,184 was a count of distinct raw speaker strings taken from an early
-exploratory report, before name normalisation and identifier matching. The
-inflation had two sources: sixty-two individuals appear under more than one
-spelling of their name (in the most extreme case one MP under eleven variants,
-adding ten spurious entries), and a further 204 distinct speaker strings could
-not be matched to the MP roster at all and were counted as separate people.
-
-The corrected figure is internally consistent: it yields 1,119 term-person
-pairs across the five TBMM terms in the corpus, implying that roughly 260
-individuals spoke as MPs in more than one term. Per-term counts range from 93
-to 339.
-
-### Fix
-
-Commit `f89b3e3` corrected the figure in the documentation. Commit `8601d14`
-(on `main`, after the `v1.1.0` tag) corrected the README notices, which still
-said four defects instead of five.
-
-### Implications for downstream analysis
-
-Per-capita calculations that used 1,184 as a denominator should be re-done with
-858. The speech records themselves were not affected. <!-- review: inferred from documented scope -->
+Before any of the role patterns were applied, each candidate was tested dry against the corpus and its linkage rate examined. A pattern capturing real MPs would show non-zero linkage; every one of the sixteen showed exactly zero, confirming none of them was catching parliamentarians. One pattern, *Başkan Yardımcısı*, was checked specifically against the risk of capturing the committee's own deputy chairs. It does not: the committee uses *Başkan Vekili*, a different word.
 
 ---
 
-## Chair and minister identity matching
+## 4. The validation suite
 
-Chair and minister identity matching, which had not been run against the
-published dataset, is included from v1.1.0. It adds seven columns:
-`bakan_id`, `bakanlik_adi`, `bakanlik_baslangic`, `bakanlik_bitis`,
-`mv_sicil_bakan`, `mv_parti_bakan` and `bakan_eslesme_tier`. Column
-definitions are in [data_dictionary.md](data_dictionary.md).
+`scripts/99_validate.R` now runs after any pipeline change. It reports per-year structural metrics — turn counts, turns per source PDF, length distribution including the upper tail, role shares, linkage rates by role — and flags years falling outside expected bands. It runs residue checks for corrupted characters, footer text, embedded speaker headers and misclassified institutional representatives, identifies outlier source files, and compares everything against a stored baseline (`baseline_v1.1.0.csv`, included in the Zenodo data archive). For how to run it, see [replication_guide.md](replication_guide.md).
 
-Identity linkage is reported by role: MP 98.0%, chair 100%, minister 99.3%.
-The previously headlined 97.5% applied to the MP role only. Measured in the
-published v1.1.0 data: MP 98.04%; chair 100.00% (77,292 of 77,293 chair-role
-turns; the one exception is a 2023 turn recorded as `BAŞKAN VEKİLİ` without a
-name); minister 99.32% (`bakan_eslesme_tier` other than `eslesemedi`, 21,402 of
-21,548 minister-role turns).
+It was validated against the pre-correction data. It raises two band flags for budget year 2016 (chair share, mean length), three residue alerts (4,587 corrupted characters, 5,268 footer instances, 552 misclassified representatives), and lists seven of the affected source files as outliers. The signals are independent of one another, so the suite does not depend on any single indicator being sensitive.
 
-The release notes give 98 ministers (80 MP-ministers and 18 appointed
-technocrats) and 6 committee chairs, plus 13 Speakers and Deputy Speakers of
-the Assembly who presided occasionally. In the data, the 98 ministers are 18
-distinct `bakan_id` values and 80 distinct `mv_sicil_bakan` values, and the
-chair-role turns carry 19 distinct `mv_sicil` values (6 + 13).
+Against the corrected corpus it raises one flag: budget year 2009, for low turn density per source PDF. That is the known and documented archive shortfall, not a defect.
 
 ---
 
-## Data structure changes for users of v1.0.1
+## 5. What remains
 
-No column was renamed in v1.1.0. The published v1.0.1 data already used
-`mv_sicil` and `mv_parti` for the MP identifier and party, although the v1.0.1
-data dictionary listed them as `sicil` and `parti` (the dictionary was wrong,
-not the data; `parti` and `sicil` exist only in `mv_metadata.parquet`). The
-column set of `konusmalar_metadata.parquet` grows from 22 to 29 columns, the
-seven added columns being those listed under identity matching above. Code
-written for v1.0.1 that selects existing columns by name keeps working.
+**Known and unfixed.** Eleven turns by the committee's own deputy chairs are still labelled as MP speech, for the reason given in §1.4. A second parser limitation concerns embedded chair headers: 104 turns (0.045%; 88 in budget years 2009-2015) contain an embedded chair header. Of 106 such transitions, 93 have no space after the dash; 10 have a header line that starts without leading indentation; 2 have the header on the same line as the preceding speaker's text; and 1 has nothing after the dash on the header line. All four fall outside the speaker regex (`R/parse_helpers.R`), so the transition is missed and the chair's words are attached to the preceding turn. A few small linkage residuals are also listed in [known_issues.md](known_issues.md) §2.5. All of these are documented.
 
-What does change is the content: the corpus has 231,923 turns instead of
-223,408, the 2016 turns are re-segmented, and 806 turns carry a different
-`rol`. Any result computed from v1.0.1 at the turn level should be recomputed.
+**Not fixable.** Budget year 2009 has four source PDFs against 13–21 for other years. The shortfall is in the source archive, not in processing. Time series should begin at 2010 with the truncation noted.
 
 ---
 
-## Validation suite
+## 6. Implications for users
 
-From v1.1.0 the repository includes `scripts/99_validate.R`, a standing
-validation suite run after any pipeline change. It reports per-year structural
-metrics (turn counts, turns per source PDF, length distribution including the
-upper tail, role shares, linkage rates), flags years falling outside expected
-bands, runs residue checks for corrupted characters, footer text, embedded
-speaker headers and misclassified institutional representatives, and compares
-against a stored baseline, `baseline_v1.1.0.csv` (reference metrics).
-
-The suite was validated against the pre-correction data: it raises two band
-flags and three residue alerts for budget year 2016, and lists seven of the
-affected source files as outliers.
-
-### How to run it
-
-The baseline file is included in the Zenodo data archive
-(`tbmm-pbk-corpus-data-v1.1.0.zip`, which also holds
-`konusmalar_metadata.parquet`). Place both files in `data/processed/`, then run
-from the repository root (packages `arrow` and `dplyr` are required):
-
-```
-Rscript scripts/99_validate.R
-```
-
-Run this way, the script reads `data/processed/konusmalar_metadata.parquet` and
-compares against `data/processed/baseline_v1.1.0.csv`. From an R session, source
-the script and call `validate_corpus(parquet_yol = ..., baseline_yol = ...)`,
-which also returns the metrics as a list. Run against the published v1.1.0
-data, the baseline comparison shows zero differences in every year.
+- **Per-turn rates confound role and topic.** Turn length varies systematically by role — chairs speak briefly and often, ministers at length — and the median turn is 8–9 words. Any per-turn rate therefore mixes who is speaking with what is being said. Measure per thousand words or at passage level.
+- **Speaker-level analyses of budget year 2016 made with v1.0.1 should be redone.** Role, party, turn length, speaker identity and turn counts for that year were unreliable in v1.0.1 (§1.1).
+- **Word counts for budget years 2013–2016 changed.** Footer text was removed (§1.2); word counts fell by 1.77–1.83% in 2013–2015 and by 3.11% in 2016.
+- **Time series should begin at 2010.** Budget year 2009 is truncated in the source archive (§5).
 
 ---
 
-## Recommended practice
+## 7. Version and citation
 
-Turn lengths vary by two orders of magnitude and systematically by role: the
-median turn is 8-9 words, chairs speak briefly and often, and ministers speak
-at length. Per-turn rates therefore confound topic with role. Measures
-normalised by word volume, or computed at passage level, are recommended.
+The corrections are published as v1.1.0 with its own version DOI, [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634). v1.0.1 remains available and citable ([10.5281/zenodo.20457566](https://doi.org/10.5281/zenodo.20457566)), so anyone who used it retains a resolvable reference. The concept DOI [10.5281/zenodo.20457565](https://doi.org/10.5281/zenodo.20457565) always resolves to the latest version. The changelog states what changed and why; the known-issues document records each defect, its measured scale, and its resolution.
 
-Budget year 2009 holds four source PDFs against 13-21 for other years. The
-shortfall is in the source archive, not in processing. Time series should
-begin at 2010.
+Papers using this corpus should report both v1.0.1 and v1.1.0 figures where the difference is material, and cite the specific version used.
