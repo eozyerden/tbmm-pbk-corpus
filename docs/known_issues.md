@@ -259,6 +259,22 @@ returned a genuine PDF, but its date was not verified.
 
 ---
 
+## 9. Manual Correction File Paths in the Matching Scripts
+
+In v1.1.0 the pipeline scripts looked for the manual correction files
+under data/processed/, while the repository stores them under
+data/manuel/. The published data is correct (produced in the
+development environment, where the files were in place), but users
+running the scripts from this repository would have obtained different
+MP and minister linkage. Fixed on 29 September 2026.
+
+The affected scripts were `12_mv_eslestirme.R`, which skipped
+`mv_metadata_manuel.csv` silently when the file was missing and now
+stops with an error, and `14_bakan_eslestir.R`, which failed to find
+`bakan_manuel.csv`. Both now read from `data/manuel/`.
+
+---
+
 ## Quality assurance
 
 From v1.1.0 the repository includes `scripts/99_validate.R`, a
