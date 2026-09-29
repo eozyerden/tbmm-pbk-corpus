@@ -197,7 +197,7 @@ TBMM'nin kendi veritabanında eksik olduğu tespit edilen milletvekilleri için 
 | Kazım Kurt | 24. dönem CHP Eskişehir sicil 6713 (TBMM kaydı var ama scraper kaçırmış) | TBMM mv detay sayfası |
 | Adil Kurt = Adil Zozani | İsim alias tablosu (mahkeme kararıyla soyadı değişikliği) | Mahkeme kararı haberleri |
 | Nimet Çubukçu | "atanmış bakan" listesinden çıkarıldı (aslında mv'ydi) | TBMM kaydı |
-| Berat Albayrak | Parser typo'sundan kaynaklı "BERAK ALBAYRAK" düzeltmesi (103 satır) | Manuel düzeltme |
+| Berat Albayrak | Parser typo'sundan kaynaklı "BERAK ALBAYRAK" düzeltmesi (1 satır; yayımlanmış v1.1.0 verisinden ölçüldü) | Manuel düzeltme |
 
 ### 4.8 Atanmış Bakan Listesi
 

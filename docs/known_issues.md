@@ -35,7 +35,7 @@ The v1.0.1 description above no longer applies as stated, because the
 institutional representatives were reclassified (§3.1).
 
 ### 2.2 Ferit Mevlüt Aslanoğlu — partial coverage
-Aslanoğlu served as an MP in the 23rd term (CHP, Malatya) and the 24th term (CHP, Istanbul; died in office 2014). TBMM's own database omits his 24th-term record. His 24th-term appearances in the corpus (5,374 rows, budget years 2012-2015) are matched via a manually added record sourced from Wikipedia and news archives.
+Aslanoğlu served as an MP in the 23rd term (CHP, Malatya) and the 24th term (CHP, Istanbul; died in office 2014). TBMM's own database omits his 24th-term record. His 24th-term appearances in the corpus (5,397 rows, budget years 2012-2014; measured from the published v1.1.0 data) are matched via a manually added record sourced from Wikipedia and news archives.
 
 ### 2.3 2012-2014 previously lower match rates
 Before the manual corrections described above, match rates for budget years 2012 (70%), 2013 (73%), and 2014 (77%) were significantly below the corpus average. These are now resolved (96-99% range) through manual MP additions and the Adil Kurt → Adil Zozani alias.
