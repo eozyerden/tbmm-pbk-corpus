@@ -32,7 +32,7 @@ km <- km_raw |> select(-any_of(BAKAN_COLS))
 
 bakan_unvan  <- read_csv(here("data/processed/bakan_unvan_isim.csv"),  show_col_types = FALSE)
 typo_map     <- read_csv(here("data/processed/bakan_typo_map.csv"),    show_col_types = FALSE)
-bakan_manuel <- read_csv(here("data/processed/bakan_manuel.csv"),       show_col_types = FALSE)
+bakan_manuel <- read_csv(here("data/manuel/bakan_manuel.csv"),          show_col_types = FALSE)
 mv_meta      <- read_parquet(here("data/processed/mv_metadata.parquet"))
 
 cat("Konusmalar:", nrow(km),
