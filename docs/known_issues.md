@@ -110,12 +110,17 @@ The `bakanlık` (ministry) field, where present, is derived from detecting minis
 ### 3.3 Speaker continuity not tracked
 When the same speaker makes multiple interventions in a session, each is recorded as a separate row. The corpus does not link these into a single "floor time" unit, nor does it record the interlocutor. Cross-turn context must be reconstructed by the analyst using `tarih` + `oturum_sira`.
 
-A related low-level case: where a speaker header is followed by a dash
-with no intervening space (`ADI SOYADI (İl) -Metin`), the regex does not
-match and the transition is missed. This occurs at background levels
-throughout the corpus, most visibly in budget year 2025 (approximately
-36 turns). Unlike the 2016 failure, it does not distort role
-distribution or turn length at the population level.
+A related case is embedded chair headers. 104 turns (0.045%; 88 in
+budget years 2009-2015) contain an embedded chair header. Of 106 such
+transitions, 93 have no space after the dash; 10 have a header line
+that starts without leading indentation; 2 have the header on the same
+line as the preceding speaker's text; and 1 has nothing after the dash
+on the header line. All four fall outside the speaker regex
+(`R/parse_helpers.R`), so the transition is missed and the chair's
+words are attached to the preceding turn. The same conditions also
+affect other speakers' headers (for example `ADI SOYADI (İl) –Metin`);
+those cases are not counted here. Unlike the 2016 failure, this does
+not distort role distribution or turn length at the population level.
 
 ---
 
