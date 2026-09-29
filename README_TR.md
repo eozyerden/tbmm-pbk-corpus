@@ -78,9 +78,11 @@ Bu GitHub reposu şunları içerir:
 ## Atıf
 
 ```
-Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
-Söylem Korpusu (2009-2025) [Veri seti]. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
+Özyerden, E. (2026). TBMM Plan and Budget Committee Discourse Corpus
+[Veri seti]. Zenodo. https://doi.org/10.5281/zenodo.20457565
 ```
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 
 Yukarıdaki atıf concept DOI'yi (10.5281/zenodo.20457565) kullanır; bu DOI her zaman en güncel sürüme yönlendirir. Analizinizde kullandığınız tam sürümü belirtmek isterseniz v1.1.0'ı doğrudan kaynak gösterin: DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 

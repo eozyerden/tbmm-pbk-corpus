@@ -107,9 +107,11 @@ To reproduce the corpus from scratch (without the Zenodo download), see [`docs/r
 If you use this corpus in your research, please cite:
 
 ```
-Özyerden, E. (2026). TBMM Budget Committee Discourse Corpus (2009-2025) [Dataset].
-Zenodo. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
+Özyerden, E. (2026). TBMM Plan and Budget Committee Discourse Corpus [Dataset].
+Zenodo. https://doi.org/10.5281/zenodo.20457565
 ```
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 
 The citation above uses the concept DOI (10.5281/zenodo.20457565), which always resolves to the latest version. To cite the exact version used in your analysis, cite v1.1.0 directly: DOI [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 
