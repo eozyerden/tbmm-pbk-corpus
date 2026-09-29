@@ -1,4 +1,4 @@
-<!-- Prepared from repository history and reviewed by the author. -->
+<!-- Prepared from repository history; awaiting author review. -->
 
 # Quality note: v1.1.0
 
