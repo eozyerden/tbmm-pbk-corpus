@@ -27,7 +27,8 @@ In Türkiye, the Plan and Budget Committee is the first and most detailed parlia
 > text in 2013-2016, role classification of institutional
 > representatives, chair identification for 2015, and a misreported
 > unique MP count (1,184 was a count of raw speaker strings; the
-> correct figure is 858). See
+> correct figure is 858). See the
+> [quality note](docs/quality_note_v1.1.0.md),
 > [CHANGELOG.md](CHANGELOG.md) and
 > [docs/known_issues.md](docs/known_issues.md). Users of v1.0.1
 > should migrate.
@@ -98,6 +99,7 @@ To reproduce the corpus from scratch (without the Zenodo download), see [`docs/r
 - [`docs/data_dictionary.md`](docs/data_dictionary.md) — Column-by-column descriptions for all output files
 - [`docs/replication_guide.md`](docs/replication_guide.md) — Step-by-step replication instructions
 - [`docs/known_issues.md`](docs/known_issues.md) — Known limitations and caveats
+- [`docs/quality_note_v1.1.0.md`](docs/quality_note_v1.1.0.md) — Quality note for v1.1.0: the five corrected defects, identity matching, and the validation suite
 - [`docs/coverage_report.md`](docs/coverage_report.md) — Coverage verification (three independent tests)
 
 ## Citing this corpus

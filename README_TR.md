@@ -26,6 +26,7 @@ TBMM Plan ve Bütçe Komisyonu bütçe görüşmelerinin yapılandırılmış, m
 > sınıflandırması, 2015 için başkan kimliği ve yanlış raporlanmış
 > benzersiz milletvekili sayısı (1.184 ham konuşmacı dizesi sayımıydı;
 > doğru rakam 858). Bkz.
+> [kalite notu](docs/quality_note_v1.1.0.md),
 > [CHANGELOG.md](CHANGELOG.md) ve
 > [docs/known_issues.md](docs/known_issues.md). v1.0.1 kullanıcıları
 > güncellemelidir.
@@ -71,6 +72,7 @@ Bu GitHub reposu şunları içerir:
 - [`docs/data_dictionary.md`](docs/data_dictionary.md) — Sütun açıklamaları
 - [`docs/replication_guide.md`](docs/replication_guide.md) — Adım adım replikasyon
 - [`docs/known_issues.md`](docs/known_issues.md) — Bilinen sınırlılıklar
+- [`docs/quality_note_v1.1.0.md`](docs/quality_note_v1.1.0.md) — v1.1.0 kalite notu (İngilizce): düzeltilen beş hata, kimlik eşleştirmesi ve doğrulama paketi
 - [`docs/coverage_report.md`](docs/coverage_report.md) — Kapsama doğrulama raporu
 
 ## Atıf
