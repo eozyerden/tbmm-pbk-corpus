@@ -1,8 +1,7 @@
 # TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)
 
-**Sürüm:** v1.1.0
+**Sürüm:** v1.1.0 (28 Ağustos 2026); belge revizyonu 29 Eylül 2026
 **Hazırlayan:** Emre Özyerden (eozyerden@gmail.com)
-**Son güncelleme:** 29 Eylül 2026
 **Lisans:** Kod: MIT | Veri ve dokümantasyon: CC BY 4.0
 
 ---
@@ -283,8 +282,11 @@ Tüm adımlar R'da kodlanmıştır. Adım adım açıklamalar için bkz. [`repli
 
 ```
 Özyerden, E. (2026). TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri
-Söylem Korpusu (2009-2025) [Veri seti]. DOI: [beklemede]
+Söylem Korpusu (2009-2025) [Veri seti]. Zenodo.
+https://doi.org/10.5281/zenodo.20457565
 ```
+
+Concept DOI (10.5281/zenodo.20457565) her zaman en güncel sürüme yönlendirir. Kullandığınız sürümü belirtmek için v1.1.0'ın sürüme özel DOI'sini kullanın: [10.5281/zenodo.22150634](https://doi.org/10.5281/zenodo.22150634).
 
 ---
 
