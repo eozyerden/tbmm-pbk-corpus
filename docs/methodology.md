@@ -197,7 +197,9 @@ All manual interventions are documented in version-controlled files under `data/
 | 18 appointed technocrat ministers | 2,858 | `bakan_manuel.csv` |
 | Province name normalization (3 city names) | small | inline in `12_mv_eslestirme.R` |
 
-Row counts are measured from the published v1.1.0 data (231,923 rows). Aslanoğlu: turns with `mv_sicil = 6228` and `tbmm_donem = 24` (budget years 2012-2014); the TBMM roster holds only his 23rd-term record. Kurt: turns with `mv_sicil = 6713`, a sicil absent from the TBMM roster (461 of the 462 carry the exact spelling "Kazım Kurt"; one is a misspelling matched by the fuzzy tier). Zozani: turns whose raw speaker string is `ADİL KURT`, all linked to `mv_sicil = 6969`. Albayrak: turns whose raw speaker string contains `BERAK ALBAYRAK`. Technocrats: turns with `bakan_eslesme_tier = "atanmış"`. For the Aslanoğlu, Kurt, Zozani and Albayrak rows the published v1.0.1 data gives the same counts. Earlier versions of this table gave 5,374 (Aslanoğlu), 461 (Kurt), 547 (Zozani) and 103 (Albayrak); of these, only 461 can be reproduced (by the exact spelling alone).
+Rows affected: for added roster records, rows linked to that identifier in the corrected term; for aliases and spelling corrections, rows carrying the corrected spelling. Figures in earlier versions of this table could not be reproduced and have been replaced.
+
+Counts are measured from the published v1.1.0 data (231,923 rows). Aslanoğlu: `mv_sicil = 6228` in term 24 (budget years 2012-2014); the TBMM roster holds only the 23rd-term record. Kurt: `mv_sicil = 6713` in term 24, a sicil absent from the TBMM roster (461 of the 462 carry the exact spelling "KAZIM KURT"; one is a misspelling matched by the fuzzy tier). Zozani: raw speaker string `ADİL KURT`, all linked to `mv_sicil = 6969`. Albayrak: raw speaker string containing `BERAK ALBAYRAK`. Technocrats: `bakan_eslesme_tier = "atanmış"`. The v1.0.1 data gives the same counts for the Aslanoğlu, Kurt, Zozani and Albayrak rows.
 
 ---
 
