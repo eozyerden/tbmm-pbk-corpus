@@ -28,4 +28,4 @@ These directories will be populated when you run the pipeline or download data f
 - `processed/konusmalar_metadata.parquet` — Main corpus (with metadata)
 - `processed/mv_metadata.parquet` — TBMM MP roster
 
-To get the full data, see [Zenodo archive: DOI placeholder].
+To get the full data, see the [Zenodo archive](https://doi.org/10.5281/zenodo.20457565) (concept DOI 10.5281/zenodo.20457565, which always resolves to the latest version).
