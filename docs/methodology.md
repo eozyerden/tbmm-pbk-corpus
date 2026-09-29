@@ -223,9 +223,13 @@ Three independent coverage tests were conducted (script: `18_kapsama_analizi.R`)
 
 **Test 3 — Volume sanity check:** Speeches per year were checked against expectations derived from the number of sessions and average speeches per session. No year showed anomalous volume.
 
-### 8.3 Long-speech inspection
+### 8.3 Long-speech inspection and validation
 
-Speeches exceeding 5,000 words (an upper-tail outlier) were manually inspected. The longest speeches were committee chairs reading lengthy budget summaries — a real feature of the data, not a parser artifact. No concatenation errors were found.
+Through v1.0.1 this section reported that speeches exceeding 5,000 words had been inspected manually, that the longest were committee chairs reading budget summaries, and that no concatenation errors were found. That was wrong. The published v1.0.1 data contained a speaker-segmentation failure in budget year 2016: speaker headers corrupted by the encoding defect described in §8.1 were not recognised, and turns from different speakers were merged. Six MP turns of more than 5,000 words in v1.0.1 were all in 2016. The failure is corrected in v1.1.0; see [quality_note_v1.1.0.md](quality_note_v1.1.0.md).
+
+From v1.1.0, concatenation errors are checked by `scripts/99_validate.R` rather than by manual inspection of long speeches. The suite reports per-year turn counts, turns per source PDF and turn-length distributions including the 99th percentile and maximum. It flags years whose turn density, mean turn length, upper tail, chair share or MP linkage fall outside expected bands, lists source files whose turn count or mean length is an outlier, and counts residue: corrupted characters, footer text, speaker headers embedded in speech text, and institutional representatives labelled as MPs. Run against the v1.0.1 data it flags budget year 2016 (chair share and mean turn length) and lists seven 2016 source files as outliers. Run against the published v1.1.0 data it raises no flag for 2016 and shows no difference from the stored baseline `baseline_v1.1.0.csv` in any year.
+
+Concatenation is rare in v1.1.0 but not absent. The embedded-header check counts 104 turns (0.04% of turns) whose text contains a chair header (`BAŞKAN –`), that is, a missed speaker transition; 88 of them are in budget years 2009-2015. Of the 22 turns longer than 5,000 words in v1.1.0, 21 are minister turns and one is a chair turn; none is attributed to an MP.
 
 ---
 
