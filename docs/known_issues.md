@@ -65,6 +65,25 @@ that roughly 260 individuals spoke as MPs in more than one term, which
 matches expected re-election patterns. Per-term counts range from 93
 to 339.
 
+### 2.5 Small linkage residuals in v1.1.0
+
+Measured from the published v1.1.0 data:
+
+- **17 appointed-minister turns labelled as MP speech.** A misspelled
+  title in the speaker header (`BAKAN` for `BAKANI`, or words run
+  together) keeps the minister pattern from matching,
+  so the turn falls through to `rol = "milletvekili"` and stays
+  unmatched (`mv_sicil = NA`, no `bakan_id`). All are in budget year
+  2024: `SAĞLIK BAKAN FAHRETTİN KOCA` (15), `İÇİŞLERİ BAKAN ALİ YERLİKAYA`
+  (1) and `ULAŞTIRMAVEALTYAPI BAKANIABDULKADİR URALOĞLU` (1).
+- **4 Ferit Mevlüt Aslanoğlu turns unmatched.** Spelling or spacing
+  errors in the speaker header keep them from matching the manual
+  24th-term record: `FERİT MEVLTÜ ASLANOĞLU` (2),
+  `FERİT MEVLÜT ASLANOĞUL` (1), and one with extra spaces between the
+  given names. The other 5,397 term-24 turns are linked (§2.2).
+
+These turns are among the 2,585 unmatched MP-role turns reported in §2.1.
+
 ---
 
 ## 3. Parser Limitations
