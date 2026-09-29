@@ -1,4 +1,4 @@
-# TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu (2009-2025)
+# TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu
 
 **Sürüm:** v1.1.0 (28 Ağustos 2026); belge revizyonu 29 Eylül 2026
 **Hazırlayan:** Emre Özyerden (eozyerden@gmail.com)

@@ -1,4 +1,4 @@
-# TBMM Plan ve Bütçe Komisyonu Söylem Korpusu (2009-2025)
+# TBMM Plan ve Bütçe Komisyonu Bütçe Görüşmeleri Söylem Korpusu
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20457565.svg)](https://doi.org/10.5281/zenodo.20457565)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans%20(Kod)-MIT-yellow.svg)](LICENSE)

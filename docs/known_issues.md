@@ -81,6 +81,14 @@ Measured from the published v1.1.0 data:
   24th-term record: `FERİT MEVLTÜ ASLANOĞLU` (2),
   `FERİT MEVLÜT ASLANOĞUL` (1), and one with extra spaces between the
   given names. The other 5,397 term-24 turns are linked (§2.2).
+- **2 institutional-representative turns labelled as MP speech.**
+  `YÜKSEK ÖĞRENİM KREDİ VE YURTLAR KURUMU MÜDÜRÜ HASAN ALBAYRAK`
+  (2 turns, budget year 2011). The title *Kurumu Müdürü* is not among
+  the bureaucrat patterns (only *Genel Müdür* is), so the turns fall
+  through to `rol = "milletvekili"` and stay unmatched. The same
+  speaker's four turns recorded as `... KURUMU GENEL MÜDÜRÜ ...` are
+  labelled `burokrat`. The validation suite's check for institutional
+  representatives labelled as MPs does not catch these two.
 
 These turns are among the 2,585 unmatched MP-role turns reported in §2.1.
 
@@ -145,7 +153,7 @@ not distort role distribution or turn length at the population level.
 
 ## 4. Encoding Issues (Historical — 2016 PDFs)
 
-Thirteen SBB PDFs from 2016 contain a defective font/encoding mapping that corrupts three Turkish characters and becomes visible when the text is extracted:
+Thirteen SBB PDFs from 2016 are affected. The text layer of these PDFs maps three Turkish characters to the wrong code points (a font encoding defect). How the PDFs render on screen was not checked. In the extracted text:
 - `Ģ` should be `ş` (92,465 instances)
 - `ġ` should be `Ş` (10,812 instances)
 - `Ġ` should be `İ` (15,319 instances)
@@ -160,11 +168,11 @@ defect as it existed in v1.0.1.
 **Severity: high. Speaker-level data for budget year 2016 should not be
 used.**
 
-The character corruption documented in §4 (İ→Ġ, Ş→Ģ/ġ) was repaired at
+The character corruption documented in §4 (İ→Ġ, Ş→ġ, ş→Ģ) was repaired at
 the text level, but the repair was applied *after* speaker segmentation.
 The speaker-line regex in `R/parse_helpers.R` matches only standard
 Turkish uppercase characters; the corrupted glyphs Ġ, Ģ and ġ fall
-outside that class. Speaker headers such as `BAĠKAN –` and
+outside that class. Speaker headers such as `BAġKAN –` and
 `MALĠYE BAKANI ... –` were therefore not recognised as speaker
 transitions, and those lines were absorbed into the preceding speaker's
 turn.

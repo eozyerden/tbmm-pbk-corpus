@@ -207,7 +207,7 @@ Counts are measured from the published v1.1.0 data (231,923 rows). Aslanoğlu: `
 
 ### 8.1 Encoding fix (2016 PDFs)
 
-Thirteen SBB PDFs from 2016 contain a defective font/encoding mapping that corrupts three Turkish characters and becomes visible when the text is extracted. The corruption was systematic and consistent:
+Thirteen SBB PDFs from 2016 are affected. The text layer of these PDFs maps three Turkish characters to the wrong code points (a font encoding defect). How the PDFs render on screen was not checked. The corruption was systematic and consistent:
 
 | Corrupted | Correct | Count |
 |---|---|---|

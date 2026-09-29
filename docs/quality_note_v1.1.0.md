@@ -12,7 +12,7 @@ For the release summary see [CHANGELOG.md](../CHANGELOG.md); for the standing li
 
 ### 1.1 Speaker segmentation failure, budget year 2016
 
-The most serious defect. The raw text extracted from thirteen source PDFs of the 2016 hearings contains a character corruption: `Ġ` in place of `İ`, `ġ` in place of `Ş`, and `Ģ` in place of `ş`. The corrupted characters are present in the text extraction output (Poppler, via `pdftools::pdf_text()`); whether the PDFs themselves display correctly on screen was not checked. The corruption was known and documented: a repair pass replaced the corrupted characters and was recorded in the published `known_issues.md`.
+The most serious defect. Thirteen source PDFs of the 2016 hearings are affected. The text layer of these PDFs maps three Turkish characters to the wrong code points (a font encoding defect). How the PDFs render on screen was not checked. In the extracted text (Poppler, via `pdftools::pdf_text()`), `Ġ` appears in place of `İ`, `ġ` in place of `Ş`, and `Ģ` in place of `ş`. The corruption was known and documented: a repair pass replaced the corrupted characters and was recorded in the published `known_issues.md`.
 
 What was not known is that the repair ran *after* speaker segmentation. The regex identifying speaker lines matches only standard Turkish uppercase characters, so headers reading `BAġKAN –` or `MALĠYE BAKANI ... –` were not recognised as speaker transitions. Those lines were absorbed into the preceding speaker's turn.
 
@@ -120,7 +120,7 @@ Verification was specified in advance, with expected values stated before the ru
 | All other 13 years | no metric changes | max difference 0 |
 | Corpus total | 223,408 → ~231,900 | 231,923 |
 | Bureaucrat turns per source PDF | 1.77 → higher | 4.51 |
-| Institutional representatives still labelled MP | 0 | 0 |
+| Institutional representatives still labelled MP | 0 | 0 by the validation suite's patterns; 2 residual turns remain (see known_issues §2.5) |
 
 The turn-count/word-count split matters: it confirms the fixes are independent and behaving as intended. Where only footer noise was present, turn boundaries were untouched and only word counts fell. Where segmentation was broken, turn counts rose.
 
